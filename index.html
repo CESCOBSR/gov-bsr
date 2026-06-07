@@ -298,11 +298,15 @@ select{padding:7px 8px;font-size:12px;border-radius:8px;border:1px solid #e0e0e0
 
 <script>
 // PDF.js 워커
-pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+if(typeof pdfjsLib !== 'undefined'){
+  pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+}
 
 // Firebase
+if(typeof firebase !== 'undefined'){
 firebase.initializeApp({databaseURL:"https://gov-bsr-default-rtdb.asia-southeast1.firebasedatabase.app"});
-const db = firebase.database();
+}
+const db = (typeof firebase !== 'undefined') ? firebase.database() : null;
 
 const REGIONS = [
   {name:'부산동부권역',branches:['부산동래','부산수영','부산진구','부산기장','해운대']},
@@ -344,13 +348,14 @@ function updateApiBanner(){
   }
 }
 
-function branchRef(b){ return db.ref('govbsr/'+b.replace(/\s/g,'_')); }
+function branchRef(b){ return db ? db.ref('govbsr/'+b.replace(/\s/g,'_')) : null; }
 
 function loadBranch(branch){
   if(unsubscribe){unsubscribe();unsubscribe=null;}
   document.getElementById('table-body').innerHTML='<tr><td colspan="9" class="loading">불러오는 중...</td></tr>';
   document.getElementById('card-list').innerHTML='<div class="loading">불러오는 중...</div>';
   const ref=branchRef(branch);
+  if(!ref){branchData={};renderContent();return;}
   const handler=ref.on('value',snap=>{
     try{
       branchData={};
@@ -361,8 +366,8 @@ function loadBranch(branch){
   unsubscribe=()=>ref.off('value',handler);
 }
 
-function saveItem(item){ branchRef(currentBranch).child(item.id).set(item); }
-function deleteItem(id){ branchRef(currentBranch).child(id).remove(); }
+function saveItem(item){ const r=branchRef(currentBranch); if(r) r.child(item.id).set(item); }
+function deleteItem(id){ const r=branchRef(currentBranch); if(r) r.child(id).remove(); }
 
 function badge(s){
   if(s==='계약 완료') return `<span class="badge badge-green">계약 완료</span>`;
