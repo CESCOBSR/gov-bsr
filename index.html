@@ -3,142 +3,164 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GOV-BSR | 부경사업부 B2G 영업 관리</title>
+<title>GOV-BSR | 부경사업부 B2G</title>
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Apple SD Gothic Neo','Malgun Gothic',sans-serif;background:#f5f5f5;color:#1a1a1a}
-.app{display:flex;height:100vh}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:'Apple SD Gothic Neo','Malgun Gothic',sans-serif;background:#f4f6f9;color:#1a1a1a;min-height:100vh}
 
-/* 사이드바 */
+/* ── PC 레이아웃 ── */
+.app{display:flex;height:100vh}
 .sidebar{width:190px;background:#fff;border-right:1px solid #e8e8e8;display:flex;flex-direction:column;flex-shrink:0}
 .sidebar-header{padding:16px 14px;border-bottom:1px solid #e8e8e8}
-.logo{font-size:16px;font-weight:600;color:#1a1a1a;letter-spacing:0.02em}
+.logo{font-size:16px;font-weight:700;color:#1a1a1a}
 .logo span{color:#2563eb}
 .sidebar-body{flex:1;overflow-y:auto;padding:10px 8px}
-.region-label{font-size:10px;font-weight:600;color:#888;letter-spacing:0.06em;margin:10px 4px 4px;text-transform:uppercase}
-.branch-item{padding:7px 10px;border-radius:6px;font-size:12px;cursor:pointer;color:#333;margin-bottom:1px;border:1px solid transparent;transition:all 0.15s}
+.region-label{font-size:10px;font-weight:700;color:#aaa;letter-spacing:0.06em;margin:12px 4px 4px}
+.branch-item{padding:8px 10px;border-radius:6px;font-size:12px;cursor:pointer;color:#444;margin-bottom:1px;border:1px solid transparent;transition:all 0.15s}
 .branch-item:hover{background:#f0f4ff;color:#2563eb}
-.branch-item.active{background:#eff6ff;color:#2563eb;border-color:#bfdbfe;font-weight:500}
+.branch-item.active{background:#eff6ff;color:#2563eb;border-color:#bfdbfe;font-weight:600}
 .region-divider{height:1px;background:#f0f0f0;margin:8px 4px}
-
-/* 메인 */
 .main{flex:1;overflow-y:auto;padding:24px}
-.page-header{margin-bottom:20px}
-.page-header h1{font-size:18px;font-weight:600;color:#1a1a1a}
-.page-header p{font-size:12px;color:#888;margin-top:4px}
 
-/* 통계 카드 */
-.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:20px}
-.stat-card{background:#fff;border:1px solid #e8e8e8;border-radius:8px;padding:14px}
-.stat-label{font-size:11px;color:#888;margin-bottom:6px}
-.stat-val{font-size:22px;font-weight:600;color:#1a1a1a}
+/* ── 모바일 상단 탭 (기본 숨김) ── */
+.mobile-header{display:none;background:#fff;border-bottom:1px solid #e8e8e8;position:sticky;top:0;z-index:50}
+.mobile-logo-bar{padding:14px 16px 0;display:flex;align-items:center;justify-content:space-between}
+.mobile-logo{font-size:17px;font-weight:700}
+.mobile-logo span{color:#2563eb}
+.region-tabs{display:flex;overflow-x:auto;padding:10px 12px 0;gap:6px;scrollbar-width:none}
+.region-tabs::-webkit-scrollbar{display:none}
+.region-tab{padding:7px 14px;border-radius:20px;font-size:12px;font-weight:600;white-space:nowrap;cursor:pointer;background:#f4f6f9;color:#888;border:1px solid transparent;flex-shrink:0}
+.region-tab.active{background:#2563eb;color:#fff}
+.branch-chips{display:flex;overflow-x:auto;padding:8px 12px 10px;gap:6px;scrollbar-width:none}
+.branch-chips::-webkit-scrollbar{display:none}
+.branch-chip{padding:6px 14px;border-radius:16px;font-size:12px;white-space:nowrap;cursor:pointer;background:#fff;color:#555;border:1px solid #e0e0e0;flex-shrink:0;transition:all 0.15s}
+.branch-chip.active{background:#eff6ff;color:#2563eb;border-color:#bfdbfe;font-weight:600}
+
+/* ── 공통 컨텐츠 ── */
+.page-header{margin-bottom:18px}
+.page-header h1{font-size:17px;font-weight:700;color:#1a1a1a}
+.page-header p{font-size:12px;color:#999;margin-top:3px}
+
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:18px}
+.stat-card{background:#fff;border:1px solid #e8e8e8;border-radius:10px;padding:12px 10px;text-align:center}
+.stat-label{font-size:10px;color:#999;margin-bottom:5px}
+.stat-val{font-size:20px;font-weight:700}
 .stat-val.blue{color:#2563eb}
 .stat-val.amber{color:#d97706}
 .stat-val.green{color:#16a34a}
-.stat-val.gray{color:#888}
+.stat-val.gray{color:#aaa}
 
-/* 툴바 */
-.toolbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px}
-.section-title{font-size:13px;font-weight:600;color:#1a1a1a}
+.toolbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;flex-wrap:wrap;gap:8px}
+.section-title{font-size:13px;font-weight:700;color:#1a1a1a}
 .toolbar-right{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
-input[type=text]{padding:6px 10px;font-size:12px;border-radius:6px;border:1px solid #d1d5db;background:#fff;color:#1a1a1a;width:150px;outline:none}
+input[type=text]{padding:7px 10px;font-size:12px;border-radius:8px;border:1px solid #e0e0e0;background:#fff;color:#1a1a1a;width:140px;outline:none}
 input[type=text]:focus{border-color:#2563eb}
-select{padding:6px 8px;font-size:12px;border-radius:6px;border:1px solid #d1d5db;background:#fff;color:#1a1a1a;outline:none;cursor:pointer}
-.btn{padding:6px 12px;font-size:12px;border-radius:6px;border:1px solid #d1d5db;background:#fff;color:#1a1a1a;cursor:pointer;font-family:inherit;transition:all 0.15s}
+select{padding:7px 8px;font-size:12px;border-radius:8px;border:1px solid #e0e0e0;background:#fff;color:#1a1a1a;outline:none}
+.btn{padding:7px 13px;font-size:12px;border-radius:8px;border:1px solid #e0e0e0;background:#fff;color:#1a1a1a;cursor:pointer;font-family:inherit;transition:all 0.15s;font-weight:500}
 .btn:hover{background:#f5f5f5}
 .btn-primary{background:#2563eb;color:#fff;border-color:#2563eb}
 .btn-primary:hover{background:#1d4ed8}
 
-/* 테이블 */
+/* PC 테이블 */
 .table-wrap{background:#fff;border:1px solid #e8e8e8;border-radius:10px;overflow:hidden;margin-bottom:20px}
 .table-wrap table{width:100%;border-collapse:collapse;font-size:12px}
-.table-wrap th{padding:9px 12px;text-align:left;font-weight:600;font-size:11px;color:#888;border-bottom:1px solid #e8e8e8;background:#fafafa;white-space:nowrap}
+.table-wrap th{padding:9px 12px;text-align:left;font-weight:600;font-size:11px;color:#999;border-bottom:1px solid #e8e8e8;background:#fafafa;white-space:nowrap}
 .table-wrap td{padding:10px 12px;border-bottom:1px solid #f0f0f0;color:#1a1a1a;vertical-align:middle}
 .table-wrap tr:last-child td{border-bottom:none}
 .table-wrap tr:hover td{background:#fafeff}
 
+/* 모바일 카드 (기본 숨김) */
+.card-list{display:none;flex-direction:column;gap:10px;margin-bottom:80px}
+.biz-card{background:#fff;border:1px solid #e8e8e8;border-radius:12px;padding:14px 16px;cursor:pointer;transition:box-shadow 0.15s}
+.biz-card:active{background:#f8fbff}
+.card-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:8px}
+.card-name{font-size:14px;font-weight:600;color:#1a1a1a;line-height:1.4;flex:1;margin-right:8px}
+.card-meta{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:6px;align-items:center}
+.card-org{font-size:11px;color:#999}
+.card-dept{display:inline-block;padding:2px 7px;border-radius:5px;font-size:11px;background:#f3f4f6;color:#555}
+.card-services{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:4px}
+.card-footer{display:flex;justify-content:space-between;align-items:center;margin-top:6px}
+.card-budget{font-size:11px;color:#888}
+.card-person{font-size:11px;color:#888}
+
 /* 배지 */
-.badge{display:inline-block;padding:2px 8px;border-radius:5px;font-size:11px;font-weight:500;margin-right:2px}
+.badge{display:inline-block;padding:3px 8px;border-radius:5px;font-size:11px;font-weight:600;margin-right:2px}
 .badge-gray{background:#f3f4f6;color:#6b7280}
 .badge-blue{background:#eff6ff;color:#2563eb}
 .badge-amber{background:#fffbeb;color:#d97706;border:1px solid #fde68a}
 .badge-green{background:#f0fdf4;color:#16a34a;border:1px solid #bbf7d0}
-.badge-red{background:#fef2f2;color:#dc2626}
 .dept-tag{display:inline-block;padding:2px 7px;border-radius:5px;font-size:11px;background:#f3f4f6;color:#555}
+.empty-state{padding:40px;text-align:center;color:#bbb;font-size:13px}
+
+/* 모바일 하단 고정 버튼 */
+.fab{display:none;position:fixed;bottom:24px;right:20px;background:#2563eb;color:#fff;border:none;border-radius:50px;padding:14px 22px;font-size:14px;font-weight:700;cursor:pointer;box-shadow:0 4px 16px rgba(37,99,235,0.35);z-index:100;font-family:inherit}
 
 /* PDF 업로드 */
-.upload-section{background:#fff;border:1px solid #e8e8e8;border-radius:10px;padding:28px;text-align:center}
-.upload-box{border:1.5px dashed #d1d5db;border-radius:8px;padding:32px;cursor:pointer;transition:all 0.15s}
+.upload-section{background:#fff;border:1px solid #e8e8e8;border-radius:10px;padding:20px;margin-bottom:20px}
+.upload-box{border:1.5px dashed #d1d5db;border-radius:8px;padding:24px;text-align:center;cursor:pointer;transition:all 0.15s}
 .upload-box:hover{border-color:#2563eb;background:#f8fbff}
-.upload-icon{font-size:28px;margin-bottom:10px;color:#9ca3af}
-.upload-title{font-size:13px;font-weight:600;color:#374151;margin-bottom:6px}
+.upload-icon{font-size:26px;margin-bottom:8px}
+.upload-title{font-size:13px;font-weight:600;color:#374151;margin-bottom:4px}
 .upload-desc{font-size:12px;color:#9ca3af;line-height:1.5}
 
 /* 모달 */
-.modal-bg{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.4);z-index:100;align-items:center;justify-content:center}
+.modal-bg{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.45);z-index:200;align-items:flex-end;justify-content:center}
 .modal-bg.open{display:flex}
-.modal{background:#fff;border-radius:12px;padding:24px;width:480px;max-width:90vw}
-.modal h2{font-size:15px;font-weight:600;margin-bottom:16px}
+.modal{background:#fff;border-radius:16px 16px 0 0;padding:20px 20px 32px;width:100%;max-width:560px;max-height:90vh;overflow-y:auto}
+.modal-handle{width:36px;height:4px;background:#e0e0e0;border-radius:2px;margin:0 auto 16px}
+.modal h2{font-size:15px;font-weight:700;margin-bottom:16px}
 .form-group{margin-bottom:12px}
-.form-group label{font-size:12px;color:#555;display:block;margin-bottom:4px;font-weight:500}
-.form-group input,.form-group select,.form-group textarea{width:100%;padding:8px 10px;font-size:12px;border:1px solid #d1d5db;border-radius:6px;font-family:inherit;color:#1a1a1a;outline:none}
+.form-group label{font-size:12px;color:#555;display:block;margin-bottom:4px;font-weight:600}
+.form-group input,.form-group select,.form-group textarea{width:100%;padding:10px 12px;font-size:13px;border:1px solid #e0e0e0;border-radius:8px;font-family:inherit;color:#1a1a1a;outline:none;background:#fff}
 .form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:#2563eb}
 .form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.modal-footer{display:flex;justify-content:flex-end;gap:8px;margin-top:16px}
+.modal-footer{display:flex;gap:8px;margin-top:16px}
+.modal-footer .btn{flex:1;padding:12px;font-size:13px;border-radius:10px}
 
-/* 빈 상태 */
-.empty-state{padding:40px;text-align:center;color:#9ca3af;font-size:13px}
+/* 상세 슬라이드 패널 */
+.detail-panel{display:none;position:fixed;top:0;right:0;width:360px;height:100%;background:#fff;box-shadow:-4px 0 24px rgba(0,0,0,0.1);z-index:150;overflow-y:auto;padding:20px}
+.detail-panel.open{display:block}
+.panel-close{background:none;border:none;font-size:20px;cursor:pointer;color:#888;float:right}
+.panel-title{font-size:16px;font-weight:700;margin-bottom:4px;padding-right:30px}
+.panel-field{margin-bottom:14px}
+.panel-label{font-size:11px;color:#999;margin-bottom:3px;font-weight:600}
+.panel-value{font-size:13px;color:#1a1a1a}
+.status-select{width:100%;padding:8px 10px;font-size:13px;border:1px solid #e0e0e0;border-radius:8px;font-family:inherit;outline:none;margin-top:4px}
+
+@media(max-width:768px){
+  .app{flex-direction:column;height:auto}
+  .sidebar{display:none}
+  .main{padding:16px}
+  .mobile-header{display:block}
+  .stats{grid-template-columns:repeat(2,1fr)}
+  .table-wrap{display:none}
+  .card-list{display:flex}
+  .fab{display:block}
+  .toolbar-right input[type=text]{width:120px}
+  .detail-panel{width:100%;border-radius:16px 16px 0 0;top:auto;bottom:0;height:85vh}
+  .modal-bg{align-items:flex-end}
+}
 </style>
 </head>
 <body>
 
+<!-- 모바일 상단 헤더 -->
+<div class="mobile-header">
+  <div class="mobile-logo-bar">
+    <div class="mobile-logo">GOV<span>-BSR</span></div>
+    <span style="font-size:11px;color:#999">부경사업부 B2G</span>
+  </div>
+  <div class="region-tabs" id="region-tabs"></div>
+  <div class="branch-chips" id="branch-chips"></div>
+</div>
+
 <div class="app">
-  <!-- 사이드바 -->
+  <!-- PC 사이드바 -->
   <div class="sidebar">
     <div class="sidebar-header">
       <div class="logo">GOV<span>-BSR</span></div>
     </div>
-    <div class="sidebar-body">
-
-      <div class="region-label">부산동부권역</div>
-      <div class="branch-item" onclick="selectBranch(this,'부산동래','부산동부권역')">부산동래</div>
-      <div class="branch-item" onclick="selectBranch(this,'부산수영','부산동부권역')">부산수영</div>
-      <div class="branch-item" onclick="selectBranch(this,'부산진구','부산동부권역')">부산진구</div>
-      <div class="branch-item" onclick="selectBranch(this,'부산기장','부산동부권역')">부산기장</div>
-      <div class="branch-item" onclick="selectBranch(this,'해운대','부산동부권역')">해운대</div>
-
-      <div class="region-divider"></div>
-      <div class="region-label">부산서부권역</div>
-      <div class="branch-item active" onclick="selectBranch(this,'부산서부','부산서부권역')">부산서부</div>
-      <div class="branch-item" onclick="selectBranch(this,'부산남부','부산서부권역')">부산남부</div>
-      <div class="branch-item" onclick="selectBranch(this,'부산북부','부산서부권역')">부산북부</div>
-      <div class="branch-item" onclick="selectBranch(this,'부산사하','부산서부권역')">부산사하</div>
-      <div class="branch-item" onclick="selectBranch(this,'김해남부','부산서부권역')">김해남부</div>
-      <div class="branch-item" onclick="selectBranch(this,'김해북부','부산서부권역')">김해북부</div>
-
-      <div class="region-divider"></div>
-      <div class="region-label">울산양산권역</div>
-      <div class="branch-item" onclick="selectBranch(this,'울산북부','울산양산권역')">울산북부</div>
-      <div class="branch-item" onclick="selectBranch(this,'울산남부','울산양산권역')">울산남부</div>
-      <div class="branch-item" onclick="selectBranch(this,'울산서부','울산양산권역')">울산서부</div>
-      <div class="branch-item" onclick="selectBranch(this,'울산중부','울산양산권역')">울산중부</div>
-      <div class="branch-item" onclick="selectBranch(this,'양산','울산양산권역')">양산</div>
-
-      <div class="region-divider"></div>
-      <div class="region-label">경남동부권역</div>
-      <div class="branch-item" onclick="selectBranch(this,'창원동부','경남동부권역')">창원동부</div>
-      <div class="branch-item" onclick="selectBranch(this,'창원서부','경남동부권역')">창원서부</div>
-      <div class="branch-item" onclick="selectBranch(this,'창원남부','경남동부권역')">창원남부</div>
-      <div class="branch-item" onclick="selectBranch(this,'창원북부','경남동부권역')">창원북부</div>
-
-      <div class="region-divider"></div>
-      <div class="region-label">경남서부권역</div>
-      <div class="branch-item" onclick="selectBranch(this,'진주동부','경남서부권역')">진주동부</div>
-      <div class="branch-item" onclick="selectBranch(this,'진주서부','경남서부권역')">진주서부</div>
-      <div class="branch-item" onclick="selectBranch(this,'거제통영','경남서부권역')">거제통영</div>
-      <div class="branch-item" onclick="selectBranch(this,'사천남해','경남서부권역')">사천남해</div>
-
-    </div>
+    <div class="sidebar-body" id="pc-sidebar"></div>
   </div>
 
   <!-- 메인 -->
@@ -149,262 +171,356 @@ select{padding:6px 8px;font-size:12px;border-radius:6px;border:1px solid #d1d5db
     </div>
 
     <div class="stats">
-      <div class="stat-card">
-        <div class="stat-label">전체 타겟</div>
-        <div class="stat-val blue" id="stat-total">0</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-label">미접촉</div>
-        <div class="stat-val gray" id="stat-none">0</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-label">접촉·협의 중</div>
-        <div class="stat-val amber" id="stat-progress">0</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-label">계약 완료</div>
-        <div class="stat-val green" id="stat-done">0</div>
-      </div>
+      <div class="stat-card"><div class="stat-label">전체 타겟</div><div class="stat-val blue" id="stat-total">0</div></div>
+      <div class="stat-card"><div class="stat-label">미접촉</div><div class="stat-val gray" id="stat-none">0</div></div>
+      <div class="stat-card"><div class="stat-label">접촉·협의</div><div class="stat-val amber" id="stat-progress">0</div></div>
+      <div class="stat-card"><div class="stat-label">계약완료</div><div class="stat-val green" id="stat-done">0</div></div>
     </div>
 
     <div class="toolbar">
       <div class="section-title">타겟 사업 목록</div>
       <div class="toolbar-right">
-        <input type="text" id="search-input" placeholder="사업명 검색..." oninput="renderTable()">
-        <select id="filter-status" onchange="renderTable()">
-          <option value="">전체 상태</option>
+        <input type="text" id="search-input" placeholder="검색..." oninput="renderContent()">
+        <select id="filter-status" onchange="renderContent()">
+          <option value="">전체</option>
           <option value="미접촉">미접촉</option>
           <option value="접촉 중">접촉 중</option>
           <option value="협의 중">협의 중</option>
           <option value="계약 완료">계약 완료</option>
         </select>
-        <button class="btn btn-primary" onclick="openModal()">+ 사업 추가</button>
+        <button class="btn btn-primary pc-only" onclick="openModal()" style="display:inline-block">+ 추가</button>
       </div>
     </div>
 
+    <!-- PC 테이블 -->
     <div class="table-wrap">
       <table>
         <thead>
           <tr>
-            <th>지자체</th>
-            <th>담당과</th>
-            <th>사업명</th>
-            <th>연계 서비스</th>
-            <th>예산규모</th>
-            <th>상태</th>
-            <th>주무관</th>
-            <th>최종 접촉일</th>
-            <th></th>
+            <th>지자체</th><th>담당과</th><th>사업명</th><th>연계서비스</th>
+            <th>예산</th><th>상태</th><th>주무관</th><th>접촉일</th><th></th>
           </tr>
         </thead>
-        <tbody id="table-body">
-        </tbody>
+        <tbody id="table-body"></tbody>
       </table>
     </div>
 
+    <!-- 모바일 카드 -->
+    <div class="card-list" id="card-list"></div>
+
     <!-- PDF 업로드 -->
     <div class="upload-section">
-      <div class="toolbar" style="margin-bottom:16px">
-        <div class="section-title">PDF 예산서 분석</div>
+      <div class="toolbar" style="margin-bottom:12px">
+        <div class="section-title">📄 PDF 예산서 분석</div>
       </div>
       <div class="upload-box" onclick="document.getElementById('pdf-input').click()">
-        <div class="upload-icon">📄</div>
+        <div class="upload-icon">📁</div>
         <div class="upload-title">예산서 PDF 업로드</div>
-        <div class="upload-desc">클릭하거나 파일을 드래그해서 업로드<br>AI가 세스코 연계 항목을 자동으로 추출합니다</div>
+        <div class="upload-desc">클릭해서 업로드 — AI가 세스코 연계 항목을 자동 추출합니다</div>
         <input type="file" id="pdf-input" accept=".pdf" style="display:none" onchange="handlePdf(this)">
-        <button class="btn" style="margin-top:14px" onclick="event.stopPropagation();document.getElementById('pdf-input').click()">파일 선택</button>
+        <button class="btn" style="margin-top:12px" onclick="event.stopPropagation();document.getElementById('pdf-input').click()">파일 선택</button>
       </div>
-      <div id="pdf-result" style="display:none;margin-top:16px;text-align:left"></div>
+      <div id="pdf-result" style="display:none;margin-top:12px"></div>
     </div>
   </div>
 </div>
 
+<!-- 모바일 FAB -->
+<button class="fab" onclick="openModal()">+ 사업 추가</button>
+
 <!-- 사업 추가 모달 -->
 <div class="modal-bg" id="modal">
   <div class="modal">
+    <div class="modal-handle"></div>
     <h2>타겟 사업 추가</h2>
     <div class="form-row">
-      <div class="form-group">
-        <label>지자체</label>
-        <input type="text" id="f-org" placeholder="예) 사하구청">
-      </div>
-      <div class="form-group">
-        <label>담당과</label>
-        <input type="text" id="f-dept" placeholder="예) 일자리경제과">
-      </div>
+      <div class="form-group"><label>지자체</label><input type="text" id="f-org" placeholder="예) 사하구청"></div>
+      <div class="form-group"><label>담당과</label><input type="text" id="f-dept" placeholder="예) 일자리경제과"></div>
     </div>
-    <div class="form-group">
-      <label>사업명</label>
-      <input type="text" id="f-name" placeholder="예) 착한가격업소 위생지원">
-    </div>
+    <div class="form-group"><label>사업명 *</label><input type="text" id="f-name" placeholder="예) 착한가격업소 위생지원"></div>
     <div class="form-row">
-      <div class="form-group">
-        <label>연계 서비스</label>
-        <input type="text" id="f-service" placeholder="예) IPM, IHM, 렌탈">
-      </div>
-      <div class="form-group">
-        <label>예산규모</label>
-        <input type="text" id="f-budget" placeholder="예) 18,000천원">
-      </div>
+      <div class="form-group"><label>연계 서비스</label><input type="text" id="f-service" placeholder="예) IPM, IHM"></div>
+      <div class="form-group"><label>예산규모</label><input type="text" id="f-budget" placeholder="예) 18,000천원"></div>
     </div>
     <div class="form-row">
       <div class="form-group">
         <label>상태</label>
         <select id="f-status">
-          <option>미접촉</option>
-          <option>접촉 중</option>
-          <option>협의 중</option>
-          <option>계약 완료</option>
+          <option>미접촉</option><option>접촉 중</option><option>협의 중</option><option>계약 완료</option>
         </select>
       </div>
-      <div class="form-group">
-        <label>주무관</label>
-        <input type="text" id="f-person" placeholder="예) 김○○ 주무관">
-      </div>
+      <div class="form-group"><label>주무관</label><input type="text" id="f-person" placeholder="예) 김○○ 주무관"></div>
     </div>
-    <div class="form-group">
-      <label>메모</label>
-      <textarea id="f-memo" rows="2" placeholder="특이사항, 협의 내용 등"></textarea>
-    </div>
+    <div class="form-group"><label>메모</label><textarea id="f-memo" rows="2" placeholder="특이사항, 협의 내용 등"></textarea></div>
     <div class="modal-footer">
       <button class="btn" onclick="closeModal()">취소</button>
-      <button class="btn btn-primary" onclick="addItem()">추가</button>
+      <button class="btn btn-primary" onclick="addItem()">추가하기</button>
+    </div>
+  </div>
+</div>
+
+<!-- 상세 패널 -->
+<div class="modal-bg" id="detail-bg" onclick="closeDetail()">
+  <div class="detail-panel" id="detail-panel" onclick="event.stopPropagation()">
+    <button class="panel-close" onclick="closeDetail()">✕</button>
+    <div class="panel-title" id="d-name"></div>
+    <div style="margin-bottom:16px" id="d-status-badge"></div>
+    <div class="panel-field"><div class="panel-label">지자체</div><div class="panel-value" id="d-org"></div></div>
+    <div class="panel-field"><div class="panel-label">담당과</div><div class="panel-value" id="d-dept"></div></div>
+    <div class="panel-field"><div class="panel-label">연계 서비스</div><div class="panel-value" id="d-service"></div></div>
+    <div class="panel-field"><div class="panel-label">예산규모</div><div class="panel-value" id="d-budget"></div></div>
+    <div class="panel-field"><div class="panel-label">주무관</div><div class="panel-value" id="d-person"></div></div>
+    <div class="panel-field"><div class="panel-label">최종 접촉일</div><div class="panel-value" id="d-date"></div></div>
+    <div class="panel-field"><div class="panel-label">메모</div><div class="panel-value" id="d-memo"></div></div>
+    <div class="panel-field">
+      <div class="panel-label">상태 변경</div>
+      <select class="status-select" id="d-status-select" onchange="updateStatus()">
+        <option>미접촉</option><option>접촉 중</option><option>협의 중</option><option>계약 완료</option>
+      </select>
+    </div>
+    <div style="margin-top:16px;display:flex;gap:8px">
+      <button class="btn btn-primary" style="flex:1;padding:12px" onclick="closeDetail()">확인</button>
+      <button class="btn" style="padding:12px;color:#dc2626;border-color:#fca5a5" onclick="deleteCurrentItem()">삭제</button>
     </div>
   </div>
 </div>
 
 <script>
-// 현재 선택된 지사
-let currentBranch = '부산서부';
+const REGIONS = [
+  {name:'부산동부권역', branches:['부산동래','부산수영','부산진구','부산기장','해운대']},
+  {name:'부산서부권역', branches:['부산서부','부산남부','부산북부','부산사하','김해남부','김해북부']},
+  {name:'울산양산권역', branches:['울산북부','울산남부','울산서부','울산중부','양산']},
+  {name:'경남동부권역', branches:['창원동부','창원서부','창원남부','창원북부']},
+  {name:'경남서부권역', branches:['진주동부','진주서부','거제통영','사천남해']}
+];
 
-// 데이터 저장소 (나중에 Firebase로 교체)
+let currentBranch = '부산서부';
+let currentRegion = '부산서부권역';
+let currentDetailId = null;
+
 let data = {
-  '부산서부': [
-    {id:1, org:'사하구청', dept:'일자리경제과', name:'착한가격업소 위생지원', service:'IPM, IHM', budget:'18,000천원', status:'협의 중', person:'김○○ 주무관', date:'2026.06.02', memo:''},
-    {id:2, org:'서구청', dept:'환경위생과', name:'공공시설 방역 연간계약', service:'IPM', budget:'12,000천원', status:'계약 완료', person:'이○○ 주무관', date:'2026.05.20', memo:''},
-    {id:3, org:'사상구청', dept:'총무과', name:'청사 정수기·공기청정기 임차', service:'렌탈', budget:'8,400천원', status:'접촉 중', person:'박○○ 주무관', date:'2026.06.05', memo:''},
-    {id:4, org:'강서구청', dept:'보건위생과', name:'식품위생 컨설팅 지원사업', service:'FS, MYLAB', budget:'15,000천원', status:'미접촉', person:'', date:'', memo:''},
-    {id:5, org:'서구청', dept:'복지정책과', name:'경로당 방역 지원사업', service:'IPM', budget:'9,600천원', status:'미접촉', person:'', date:'', memo:''},
+  '부산서부':[
+    {id:1,org:'사하구청',dept:'일자리경제과',name:'착한가격업소 위생지원',service:'IPM, IHM',budget:'18,000천원',status:'협의 중',person:'김○○ 주무관',date:'2026.06.02',memo:'업체 리스트 수령 완료'},
+    {id:2,org:'서구청',dept:'환경위생과',name:'공공시설 방역 연간계약',service:'IPM',budget:'12,000천원',status:'계약 완료',person:'이○○ 주무관',date:'2026.05.20',memo:''},
+    {id:3,org:'사상구청',dept:'총무과',name:'청사 정수기·공기청정기 임차',service:'렌탈',budget:'8,400천원',status:'접촉 중',person:'박○○ 주무관',date:'2026.06.05',memo:''},
+    {id:4,org:'강서구청',dept:'보건위생과',name:'식품위생 컨설팅 지원사업',service:'FS, MYLAB',budget:'15,000천원',status:'미접촉',person:'',date:'',memo:''},
+    {id:5,org:'서구청',dept:'복지정책과',name:'경로당 방역 지원사업',service:'IPM',budget:'9,600천원',status:'미접촉',person:'',date:'',memo:''},
   ]
 };
-
 let nextId = 100;
 
-function selectBranch(el, branch, region) {
-  document.querySelectorAll('.branch-item').forEach(b => b.classList.remove('active'));
-  el.classList.add('active');
-  currentBranch = branch;
-  document.getElementById('main-title').textContent = branch + ' — B2G 영업 현황';
-  document.getElementById('main-sub').textContent = '권역: ' + region;
-  document.getElementById('search-input').value = '';
-  document.getElementById('filter-status').value = '';
-  renderTable();
+function badge(s){
+  if(s==='계약 완료') return `<span class="badge badge-green">계약 완료</span>`;
+  if(s==='협의 중') return `<span class="badge badge-amber">협의 중</span>`;
+  if(s==='접촉 중') return `<span class="badge badge-blue">접촉 중</span>`;
+  return `<span class="badge badge-gray">미접촉</span>`;
 }
-
-function getStatusBadge(s) {
-  if(s==='계약 완료') return '<span class="badge badge-green">계약 완료</span>';
-  if(s==='협의 중') return '<span class="badge badge-amber">협의 중</span>';
-  if(s==='접촉 중') return '<span class="badge badge-blue">접촉 중</span>';
-  return '<span class="badge badge-gray">미접촉</span>';
-}
-
-function getServiceBadges(s) {
+function serviceBadges(s){
   if(!s) return '—';
-  return s.split(',').map(t => `<span class="badge badge-blue">${t.trim()}</span>`).join('');
+  return s.split(',').map(t=>`<span class="badge badge-blue">${t.trim()}</span>`).join('');
+}
+function today(){
+  const d=new Date();
+  return d.getFullYear()+'.'+String(d.getMonth()+1).padStart(2,'0')+'.'+String(d.getDate()).padStart(2,'0');
 }
 
-function renderTable() {
-  const rows = data[currentBranch] || [];
-  const search = document.getElementById('search-input').value.toLowerCase();
-  const statusFilter = document.getElementById('filter-status').value;
-
-  const filtered = rows.filter(r => {
-    const matchSearch = !search || r.name.toLowerCase().includes(search) || r.org.toLowerCase().includes(search) || r.dept.toLowerCase().includes(search);
-    const matchStatus = !statusFilter || r.status === statusFilter;
-    return matchSearch && matchStatus;
+function buildSidebar(){
+  const pc = document.getElementById('pc-sidebar');
+  const rTabs = document.getElementById('region-tabs');
+  pc.innerHTML=''; rTabs.innerHTML='';
+  REGIONS.forEach((r,ri)=>{
+    if(ri>0) pc.innerHTML+=`<div class="region-divider"></div>`;
+    pc.innerHTML+=`<div class="region-label">${r.name}</div>`;
+    r.branches.forEach(b=>{
+      pc.innerHTML+=`<div class="branch-item${b===currentBranch?' active':''}" onclick="selectBranch('${b}','${r.name}')">${b}</div>`;
+    });
+    rTabs.innerHTML+=`<div class="region-tab${r.name===currentRegion?' active':''}" onclick="selectRegion('${r.name}',${ri})">${r.name.replace('권역','')}</div>`;
   });
+  buildChips();
+}
 
-  const tbody = document.getElementById('table-body');
-  if(filtered.length === 0) {
-    tbody.innerHTML = '<tr><td colspan="9" class="empty-state">등록된 사업이 없습니다. 사업 추가 버튼을 눌러 추가하세요.</td></tr>';
-  } else {
-    tbody.innerHTML = filtered.map(r => `
+function buildChips(){
+  const chips = document.getElementById('branch-chips');
+  chips.innerHTML='';
+  const region = REGIONS.find(r=>r.name===currentRegion);
+  if(!region) return;
+  region.branches.forEach(b=>{
+    chips.innerHTML+=`<div class="branch-chip${b===currentBranch?' active':''}" onclick="selectBranch('${b}','${currentRegion}')">${b}</div>`;
+  });
+}
+
+function selectRegion(name){
+  currentRegion=name;
+  const region=REGIONS.find(r=>r.name===name);
+  if(region && !region.branches.includes(currentBranch)){
+    currentBranch=region.branches[0];
+  }
+  buildSidebar();
+  updateHeader();
+  renderContent();
+}
+
+function selectBranch(branch, region){
+  currentBranch=branch;
+  currentRegion=region;
+  buildSidebar();
+  updateHeader();
+  renderContent();
+}
+
+function updateHeader(){
+  document.getElementById('main-title').textContent=currentBranch+' — B2G 영업 현황';
+  document.getElementById('main-sub').textContent='권역: '+currentRegion;
+}
+
+function getFiltered(){
+  const rows=data[currentBranch]||[];
+  const search=document.getElementById('search-input').value.toLowerCase();
+  const sf=document.getElementById('filter-status').value;
+  return rows.filter(r=>{
+    const ms=!search||r.name.toLowerCase().includes(search)||r.org.toLowerCase().includes(search)||r.dept.toLowerCase().includes(search);
+    const mf=!sf||r.status===sf;
+    return ms&&mf;
+  });
+}
+
+function renderContent(){
+  const filtered=getFiltered();
+  const all=data[currentBranch]||[];
+
+  // 통계
+  document.getElementById('stat-total').textContent=all.length;
+  document.getElementById('stat-none').textContent=all.filter(r=>r.status==='미접촉').length;
+  document.getElementById('stat-progress').textContent=all.filter(r=>r.status==='접촉 중'||r.status==='협의 중').length;
+  document.getElementById('stat-done').textContent=all.filter(r=>r.status==='계약 완료').length;
+
+  // PC 테이블
+  const tbody=document.getElementById('table-body');
+  tbody.innerHTML=filtered.length===0
+    ?`<tr><td colspan="9" class="empty-state">등록된 사업이 없습니다</td></tr>`
+    :filtered.map(r=>`
       <tr>
         <td>${r.org||'—'}</td>
         <td><span class="dept-tag">${r.dept||'—'}</span></td>
-        <td>${r.name}</td>
-        <td>${getServiceBadges(r.service)}</td>
+        <td style="font-weight:500">${r.name}</td>
+        <td>${serviceBadges(r.service)}</td>
         <td>${r.budget||'—'}</td>
-        <td>${getStatusBadge(r.status)}</td>
+        <td>${badge(r.status)}</td>
         <td>${r.person||'—'}</td>
         <td>${r.date||'—'}</td>
-        <td><button class="btn" style="padding:3px 8px;font-size:11px" onclick="deleteItem(${r.id})">삭제</button></td>
-      </tr>
-    `).join('');
-  }
+        <td><button class="btn" style="padding:3px 8px;font-size:11px" onclick="openDetail(${r.id})">상세</button></td>
+      </tr>`).join('');
 
-  // 통계 업데이트
-  const all = rows;
-  document.getElementById('stat-total').textContent = all.length;
-  document.getElementById('stat-none').textContent = all.filter(r=>r.status==='미접촉').length;
-  document.getElementById('stat-progress').textContent = all.filter(r=>r.status==='접촉 중'||r.status==='협의 중').length;
-  document.getElementById('stat-done').textContent = all.filter(r=>r.status==='계약 완료').length;
+  // 모바일 카드
+  const cardList=document.getElementById('card-list');
+  cardList.innerHTML=filtered.length===0
+    ?`<div class="empty-state">등록된 사업이 없습니다<br><small style="color:#ccc;margin-top:6px;display:block">아래 + 버튼으로 추가하세요</small></div>`
+    :filtered.map(r=>`
+      <div class="biz-card" onclick="openDetail(${r.id})">
+        <div class="card-top">
+          <div class="card-name">${r.name}</div>
+          ${badge(r.status)}
+        </div>
+        <div class="card-meta">
+          <span class="card-org">${r.org||''}</span>
+          ${r.dept?`<span class="card-dept">${r.dept}</span>`:''}
+        </div>
+        <div class="card-services">${serviceBadges(r.service)}</div>
+        <div class="card-footer">
+          <span class="card-budget">${r.budget||''}</span>
+          <span class="card-person">${r.person||r.date||''}</span>
+        </div>
+      </div>`).join('');
 }
 
-function openModal() {
+function openDetail(id){
+  const all=data[currentBranch]||[];
+  const r=all.find(x=>x.id===id);
+  if(!r) return;
+  currentDetailId=id;
+  document.getElementById('d-name').textContent=r.name;
+  document.getElementById('d-status-badge').innerHTML=badge(r.status);
+  document.getElementById('d-org').textContent=r.org||'—';
+  document.getElementById('d-dept').textContent=r.dept||'—';
+  document.getElementById('d-service').innerHTML=serviceBadges(r.service);
+  document.getElementById('d-budget').textContent=r.budget||'—';
+  document.getElementById('d-person').textContent=r.person||'—';
+  document.getElementById('d-date').textContent=r.date||'—';
+  document.getElementById('d-memo').textContent=r.memo||'—';
+  document.getElementById('d-status-select').value=r.status;
+  document.getElementById('detail-bg').classList.add('open');
+  document.getElementById('detail-panel').classList.add('open');
+}
+
+function closeDetail(){
+  document.getElementById('detail-bg').classList.remove('open');
+  document.getElementById('detail-panel').classList.remove('open');
+  currentDetailId=null;
+}
+
+function updateStatus(){
+  if(!currentDetailId) return;
+  const newStatus=document.getElementById('d-status-select').value;
+  const all=data[currentBranch]||[];
+  const r=all.find(x=>x.id===currentDetailId);
+  if(!r) return;
+  r.status=newStatus;
+  if(newStatus!=='미접촉' && !r.date) r.date=today();
+  document.getElementById('d-status-badge').innerHTML=badge(newStatus);
+  renderContent();
+}
+
+function deleteCurrentItem(){
+  if(!currentDetailId) return;
+  if(!confirm('삭제하시겠습니까?')) return;
+  data[currentBranch]=(data[currentBranch]||[]).filter(r=>r.id!==currentDetailId);
+  closeDetail();
+  renderContent();
+}
+
+function openModal(){
   document.getElementById('modal').classList.add('open');
 }
-
-function closeModal() {
+function closeModal(){
   document.getElementById('modal').classList.remove('open');
-  ['f-org','f-dept','f-name','f-service','f-budget','f-person','f-memo'].forEach(id => document.getElementById(id).value='');
+  ['f-org','f-dept','f-name','f-service','f-budget','f-person','f-memo'].forEach(id=>document.getElementById(id).value='');
   document.getElementById('f-status').value='미접촉';
 }
-
-function addItem() {
-  const name = document.getElementById('f-name').value.trim();
-  if(!name) { alert('사업명을 입력하세요.'); return; }
-  if(!data[currentBranch]) data[currentBranch] = [];
-  const today = new Date();
-  const dateStr = today.getFullYear()+'.'+String(today.getMonth()+1).padStart(2,'0')+'.'+String(today.getDate()).padStart(2,'0');
+function addItem(){
+  const name=document.getElementById('f-name').value.trim();
+  if(!name){alert('사업명을 입력하세요.');return;}
+  if(!data[currentBranch]) data[currentBranch]=[];
+  const status=document.getElementById('f-status').value;
   data[currentBranch].push({
-    id: nextId++,
-    org: document.getElementById('f-org').value.trim(),
-    dept: document.getElementById('f-dept').value.trim(),
-    name: name,
-    service: document.getElementById('f-service').value.trim(),
-    budget: document.getElementById('f-budget').value.trim(),
-    status: document.getElementById('f-status').value,
-    person: document.getElementById('f-person').value.trim(),
-    date: document.getElementById('f-status').value !== '미접촉' ? dateStr : '',
-    memo: document.getElementById('f-memo').value.trim()
+    id:nextId++,
+    org:document.getElementById('f-org').value.trim(),
+    dept:document.getElementById('f-dept').value.trim(),
+    name,
+    service:document.getElementById('f-service').value.trim(),
+    budget:document.getElementById('f-budget').value.trim(),
+    status,
+    person:document.getElementById('f-person').value.trim(),
+    date:status!=='미접촉'?today():'',
+    memo:document.getElementById('f-memo').value.trim()
   });
   closeModal();
-  renderTable();
+  renderContent();
 }
 
-function deleteItem(id) {
-  if(!confirm('삭제하시겠습니까?')) return;
-  data[currentBranch] = (data[currentBranch]||[]).filter(r=>r.id!==id);
-  renderTable();
-}
-
-function handlePdf(input) {
-  const file = input.files[0];
+function handlePdf(input){
+  const file=input.files[0];
   if(!file) return;
-  const result = document.getElementById('pdf-result');
-  result.style.display = 'block';
-  result.innerHTML = '<div style="padding:16px;background:#f0f4ff;border-radius:8px;font-size:12px;color:#2563eb">📄 ' + file.name + ' 업로드됨 — PDF AI 분석 기능은 Firebase 연동 후 활성화됩니다.</div>';
+  const r=document.getElementById('pdf-result');
+  r.style.display='block';
+  r.innerHTML=`<div style="padding:14px;background:#eff6ff;border-radius:8px;font-size:12px;color:#2563eb">📄 ${file.name} 업로드됨 — PDF AI 분석 기능은 Firebase 연동 후 활성화됩니다.</div>`;
 }
 
-// 초기 렌더
-renderTable();
+document.getElementById('modal').addEventListener('click',function(e){if(e.target===this)closeModal();});
 
-// 모달 배경 클릭시 닫기
-document.getElementById('modal').addEventListener('click', function(e){
-  if(e.target===this) closeModal();
-});
+// 초기화
+buildSidebar();
+updateHeader();
+renderContent();
 </script>
 </body>
 </html>
-HTMLEOF
