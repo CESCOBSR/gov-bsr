@@ -549,7 +549,14 @@ async function handlePdf(input){
     const prompt=`다음은 지자체 예산서 PDF에서 추출한 텍스트입니다. 
 세스코(CESCO) 환경위생 서비스와 연계 가능한 예산 항목을 찾아서 JSON 배열로 반환해주세요.
 
-연계 가능한 키워드: 방역, 소독, 정수기, 공기청정기, 비데, 에어컨청소, 에어컨 청소, 위생, 환경위생, 식품위생, 청소용역, 해충, 방제, 살균, 임차료(정수기/공기청정기/비데)
+연계 가능한 키워드:
+- 방역/소독류: 방역, 소독, 해충, 방제, 살균, 쥐잡기, 구서, 구충, 방충, 해충방제, 병해충
+- 청소/위생류: 에어컨청소, 에어컨 청소, 후드청소, 그리스트랩, 청소용역, 환경청소
+- 렌탈류: 정수기, 공기청정기, 비데, 냉온수기, 정수기임차, 공기청정기임차
+- 위생/식품: 위생, 환경위생, 식품위생, 위생점검, 위생컨설팅, 위생관리
+- 복지시설: 경로당, 복지관, 노인복지, 어린이집, 사회복지
+- 지원사업: 착한가격업소, 소상공인위생, 전통시장위생, 위생지원
+- 용품류: 위생용품, 세정제, 살균제, 소독제, 방역약품
 
 반드시 아래 JSON 형식만 반환하세요. 다른 텍스트 없이 JSON만:
 [
@@ -558,16 +565,21 @@ async function handlePdf(input){
     "dept": "담당과명(예: 환경위생과)",
     "name": "사업명",
     "budget": "예산액(천원 단위, 예: 2,700천원)",
-    "service": "연계서비스(IPM/IHM/렌탈/FS/MYLAB 중 해당하는 것)"
+    "service": "연계서비스(IPM/IHM/렌탈/FS/MYLAB 중 해당하는 것, 복수면 쉼표로)",
+    "quantity": "수량(렌탈 항목만, 예: 정수기 5대, 공기청정기 3대. 없으면 빈문자열)"
   }
 ]
 
 service 분류 기준:
-- IPM: 방역, 소독, 해충, 방제, 살균
-- IHM: 에어컨청소, 청소용역
-- 렌탈: 정수기, 공기청정기, 비데 임차
-- FS: 식품위생, 위생컨설팅
-- MYLAB: 위생용품, 세정제
+- IPM: 방역, 소독, 해충, 방제, 살균, 구서, 구충, 방충, 병해충
+- IHM: 에어컨청소, 후드청소, 그리스트랩, 청소용역, 환경청소
+- 렌탈: 정수기, 공기청정기, 비데, 냉온수기 임차/렌탈
+- FS: 식품위생, 위생컨설팅, 위생점검, 위생교육, 위생관리
+- MYLAB: 위생용품, 세정제, 살균제, 소독제, 방역약품
+
+quantity 추출 기준(렌탈 항목만):
+- PDF에서 정수기 N대, 공기청정기 N대 등 수량 정보를 찾아 기재
+- 수량 없으면 빈문자열로 반환
 
 PDF 텍스트:
 ${pdfText.substring(0,8000)}`;
@@ -628,7 +640,7 @@ function showPdfModal(items, filename){
   document.getElementById('pdf-modal-items').innerHTML=`
     <div style="font-size:11px;color:#999;margin-bottom:10px">파일: ${filename}</div>
     <table class="pdf-result-table">
-      <thead><tr><th style="width:32px"><input type="checkbox" id="check-all" onchange="toggleAll(this)" checked></th><th>지자체</th><th>담당과</th><th>사업명</th><th>예산</th><th>서비스</th></tr></thead>
+      <thead><tr><th style="width:32px"><input type="checkbox" id="check-all" onchange="toggleAll(this)" checked></th><th>지자체</th><th>담당과</th><th>사업명</th><th>예산</th><th>서비스</th><th>수량</th></tr></thead>
       <tbody>${items.map((item,i)=>`
         <tr>
           <td><input type="checkbox" class="pdf-check" data-idx="${i}" checked></td>
@@ -637,6 +649,7 @@ function showPdfModal(items, filename){
           <td style="font-weight:500">${item.name}</td>
           <td>${item.budget||'—'}</td>
           <td><span class="badge badge-blue">${item.service||'—'}</span></td>
+          <td style="font-size:11px;color:#888">${item.quantity||'—'}</td>
         </tr>`).join('')}
       </tbody>
     </table>`;
@@ -657,8 +670,8 @@ function addPdfItems(){
     if(!item)return;
     const id='item_'+Date.now()+'_'+Math.random().toString(36).substr(2,5);
     saveItem({id,org:item.org||'',dept:item.dept||'',name:item.name,
-      service:item.service||'',budget:item.budget||'',status:'미접촉',
-      person:'',date:'',memo:'PDF 자동 추출',branch:currentBranch,createdAt:Date.now()});
+      service:item.service||'',budget:item.budget||'',quantity:item.quantity||'',status:'미접촉',
+      person:'',date:'',memo:'PDF 자동 추출 '+(item.quantity?'[수량: '+item.quantity+']':''),branch:currentBranch,createdAt:Date.now()});
     count++;
   });
   closePdfModal();
