@@ -45,13 +45,15 @@ body{font-family:'Apple SD Gothic Neo','Malgun Gothic',sans-serif;background:#f4
 .toolbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;flex-wrap:wrap;gap:8px}
 .section-title{font-size:13px;font-weight:700;color:#1a1a1a}
 .toolbar-right{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
-input[type=text]{padding:7px 10px;font-size:12px;border-radius:8px;border:1px solid #e0e0e0;background:#fff;color:#1a1a1a;width:140px;outline:none}
-input[type=text]:focus{border-color:#2563eb}
+input[type=text],input[type=password]{padding:7px 10px;font-size:12px;border-radius:8px;border:1px solid #e0e0e0;background:#fff;color:#1a1a1a;outline:none}
+input[type=text]:focus,input[type=password]:focus{border-color:#2563eb}
 select{padding:7px 8px;font-size:12px;border-radius:8px;border:1px solid #e0e0e0;background:#fff;color:#1a1a1a;outline:none}
 .btn{padding:7px 13px;font-size:12px;border-radius:8px;border:1px solid #e0e0e0;background:#fff;color:#1a1a1a;cursor:pointer;font-family:inherit;transition:all 0.15s;font-weight:500}
 .btn:hover{background:#f5f5f5}
 .btn-primary{background:#2563eb;color:#fff;border-color:#2563eb}
 .btn-primary:hover{background:#1d4ed8}
+.btn-green{background:#16a34a;color:#fff;border-color:#16a34a}
+.btn-green:hover{background:#15803d}
 .table-wrap{background:#fff;border:1px solid #e8e8e8;border-radius:10px;overflow:hidden;margin-bottom:20px}
 .table-wrap table{width:100%;border-collapse:collapse;font-size:12px}
 .table-wrap th{padding:9px 12px;text-align:left;font-weight:600;font-size:11px;color:#999;border-bottom:1px solid #e8e8e8;background:#fafafa;white-space:nowrap}
@@ -104,8 +106,25 @@ select{padding:7px 8px;font-size:12px;border-radius:8px;border:1px solid #e0e0e0
 .panel-value{font-size:13px;color:#1a1a1a}
 .status-select{width:100%;padding:10px 12px;font-size:13px;border:1px solid #e0e0e0;border-radius:8px;font-family:inherit;outline:none;margin-top:4px;background:#fff}
 .loading{text-align:center;padding:30px;color:#999;font-size:13px}
-.toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#1a1a1a;color:#fff;padding:10px 20px;border-radius:20px;font-size:13px;z-index:300;opacity:0;transition:opacity 0.3s;pointer-events:none}
+.toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#1a1a1a;color:#fff;padding:10px 20px;border-radius:20px;font-size:13px;z-index:300;opacity:0;transition:opacity 0.3s;pointer-events:none;white-space:nowrap}
 .toast.show{opacity:1}
+/* API 키 설정 배너 */
+.api-banner{background:#fffbeb;border:1px solid #fde68a;border-radius:10px;padding:14px 16px;margin-bottom:16px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.api-banner.ok{background:#f0fdf4;border-color:#bbf7d0}
+.api-banner-text{font-size:12px;color:#92400e;flex:1}
+.api-banner.ok .api-banner-text{color:#166534}
+.api-input-wrap{display:flex;gap:6px;align-items:center;width:100%}
+.api-input-wrap input{flex:1;padding:8px 10px;font-size:12px;border-radius:8px;border:1px solid #e0e0e0;font-family:inherit;outline:none}
+/* PDF 결과 */
+.pdf-result-item{background:#f8fbff;border:1px solid #bfdbfe;border-radius:8px;padding:12px;margin-bottom:8px}
+.pdf-result-item h4{font-size:12px;font-weight:700;color:#1e40af;margin-bottom:6px}
+.pdf-result-table{width:100%;border-collapse:collapse;font-size:11px}
+.pdf-result-table th{padding:6px 8px;background:#eff6ff;color:#1e40af;font-weight:600;text-align:left;border-bottom:1px solid #bfdbfe}
+.pdf-result-table td{padding:6px 8px;border-bottom:1px solid #e0effe;color:#1a1a1a;vertical-align:middle}
+.pdf-result-table tr:last-child td{border-bottom:none}
+.analyzing{text-align:center;padding:24px;color:#2563eb;font-size:13px}
+.analyzing-spinner{font-size:24px;display:block;margin-bottom:8px;animation:spin 1s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
 @media(max-width:768px){
   .app{flex-direction:column;height:auto}
   .sidebar{display:none}
@@ -115,7 +134,7 @@ select{padding:7px 8px;font-size:12px;border-radius:8px;border:1px solid #e0e0e0
   .table-wrap{display:none}
   .card-list{display:flex}
   .fab{display:block}
-  .toolbar-right input[type=text]{width:110px}
+  .toolbar-right input[type=text]{width:100px}
 }
 </style>
 </head>
@@ -136,6 +155,19 @@ select{padding:7px 8px;font-size:12px;border-radius:8px;border:1px solid #e0e0e0
     <div class="sidebar-body" id="pc-sidebar"></div>
   </div>
   <div class="main">
+
+    <!-- API 키 배너 -->
+    <div class="api-banner" id="api-banner">
+      <div style="font-size:18px">🔑</div>
+      <div style="flex:1">
+        <div class="api-banner-text" id="api-banner-text">PDF AI 분석을 사용하려면 Anthropic API 키를 입력하세요 (이 기기에만 저장됩니다)</div>
+        <div class="api-input-wrap" id="api-input-wrap" style="margin-top:8px">
+          <input type="password" id="api-key-input" placeholder="sk-ant-..." style="flex:1">
+          <button class="btn btn-primary" onclick="saveApiKey()">저장</button>
+        </div>
+      </div>
+    </div>
+
     <div class="page-header">
       <h1 id="main-title">부산서부 — B2G 영업 현황</h1>
       <p id="main-sub">권역: 부산서부권역</p>
@@ -149,7 +181,7 @@ select{padding:7px 8px;font-size:12px;border-radius:8px;border:1px solid #e0e0e0
     <div class="toolbar">
       <div class="section-title">타겟 사업 목록</div>
       <div class="toolbar-right">
-        <input type="text" id="search-input" placeholder="검색..." oninput="renderContent()">
+        <input type="text" id="search-input" placeholder="검색..." oninput="renderContent()" style="width:140px">
         <select id="filter-status" onchange="renderContent()">
           <option value="">전체</option>
           <option value="미접촉">미접촉</option>
@@ -165,23 +197,25 @@ select{padding:7px 8px;font-size:12px;border-radius:8px;border:1px solid #e0e0e0
         <thead>
           <tr><th>지자체</th><th>담당과</th><th>사업명</th><th>연계서비스</th><th>예산</th><th>상태</th><th>주무관</th><th>접촉일</th><th></th></tr>
         </thead>
-        <tbody id="table-body"><tr><td colspan="9" class="loading">데이터 불러오는 중...</td></tr></tbody>
+        <tbody id="table-body"><tr><td colspan="9" class="loading">불러오는 중...</td></tr></tbody>
       </table>
     </div>
-    <div class="card-list" id="card-list"><div class="loading">데이터 불러오는 중...</div></div>
+    <div class="card-list" id="card-list"><div class="loading">불러오는 중...</div></div>
 
+    <!-- PDF 업로드 -->
     <div class="upload-section">
       <div class="toolbar" style="margin-bottom:12px">
-        <div class="section-title">📄 PDF 예산서 분석</div>
+        <div class="section-title">📄 PDF 예산서 AI 분석</div>
+        <div id="api-status-badge"></div>
       </div>
-      <div class="upload-box" onclick="document.getElementById('pdf-input').click()">
+      <div class="upload-box" onclick="triggerPdf()">
         <div class="upload-icon">📁</div>
         <div class="upload-title">예산서 PDF 업로드</div>
-        <div class="upload-desc">클릭해서 업로드 — AI가 세스코 연계 항목을 자동 추출합니다</div>
+        <div class="upload-desc">클릭해서 업로드 — AI가 세스코 연계 항목을 자동 추출합니다<br><small style="color:#bbb">(방역, 정수기, 공기청정기, 비데, 위생, 소독, 에어컨 청소 등)</small></div>
         <input type="file" id="pdf-input" accept=".pdf" style="display:none" onchange="handlePdf(this)">
-        <button class="btn" style="margin-top:12px" onclick="event.stopPropagation();document.getElementById('pdf-input').click()">파일 선택</button>
+        <button class="btn btn-primary" style="margin-top:12px" onclick="event.stopPropagation();triggerPdf()">파일 선택</button>
       </div>
-      <div id="pdf-result" style="display:none;margin-top:12px"></div>
+      <div id="pdf-result" style="margin-top:14px"></div>
     </div>
   </div>
 </div>
@@ -219,7 +253,7 @@ select{padding:7px 8px;font-size:12px;border-radius:8px;border:1px solid #e0e0e0
 </div>
 
 <!-- 상세 패널 -->
-<div class="modal-bg" id="detail-bg" onclick="closeDetail()">
+<div class="modal-bg" id="detail-bg">
   <div class="detail-panel" onclick="event.stopPropagation()">
     <div class="panel-handle"></div>
     <div class="panel-title" id="d-name"></div>
@@ -244,72 +278,91 @@ select{padding:7px 8px;font-size:12px;border-radius:8px;border:1px solid #e0e0e0
   </div>
 </div>
 
-<!-- Firebase SDK -->
+<!-- PDF 항목 확인 모달 -->
+<div class="modal-bg" id="pdf-modal">
+  <div class="modal" style="max-width:680px">
+    <div class="modal-handle"></div>
+    <h2>📋 AI 분석 결과 — 추가할 항목 선택</h2>
+    <p style="font-size:12px;color:#999;margin-bottom:14px">체크된 항목이 현재 지사(<span id="pdf-modal-branch"></span>)에 추가됩니다</p>
+    <div id="pdf-modal-items"></div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closePdfModal()">취소</button>
+      <button class="btn btn-green" onclick="addPdfItems()">✅ 선택 항목 추가</button>
+    </div>
+  </div>
+</div>
+
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 
 <script>
-// Firebase 초기화
-const firebaseConfig = {
-  databaseURL: "https://gov-bsr-default-rtdb.asia-southeast1.firebasedatabase.app"
-};
-firebase.initializeApp(firebaseConfig);
+// PDF.js 워커
+pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+// Firebase
+firebase.initializeApp({databaseURL:"https://gov-bsr-default-rtdb.asia-southeast1.firebasedatabase.app"});
 const db = firebase.database();
 
 const REGIONS = [
-  {name:'부산동부권역', branches:['부산동래','부산수영','부산진구','부산기장','해운대']},
-  {name:'부산서부권역', branches:['부산서부','부산남부','부산북부','부산사하','김해남부','김해북부']},
-  {name:'울산양산권역', branches:['울산북부','울산남부','울산서부','울산중부','양산']},
-  {name:'경남동부권역', branches:['창원동부','창원서부','창원남부','창원북부']},
-  {name:'경남서부권역', branches:['진주동부','진주서부','거제통영','사천남해']}
+  {name:'부산동부권역',branches:['부산동래','부산수영','부산진구','부산기장','해운대']},
+  {name:'부산서부권역',branches:['부산서부','부산남부','부산북부','부산사하','김해남부','김해북부']},
+  {name:'울산양산권역',branches:['울산북부','울산남부','울산서부','울산중부','양산']},
+  {name:'경남동부권역',branches:['창원동부','창원서부','창원남부','창원북부']},
+  {name:'경남서부권역',branches:['진주동부','진주서부','거제통영','사천남해']}
 ];
 
-let currentBranch = '부산서부';
-let currentRegion = '부산서부권역';
-let currentDetailId = null;
-let branchData = {};
-let unsubscribe = null;
+let currentBranch='부산서부', currentRegion='부산서부권역';
+let currentDetailId=null, branchData={}, unsubscribe=null;
+let pdfExtractedItems=[];
 
-// Firebase 경로 — /govbsr/ 아래에만 저장 (떴GO 데이터와 완전 분리)
-function branchRef(branch) {
-  return db.ref('govbsr/' + branch.replace(/\s/g,'_'));
+// API 키 관리 (localStorage에만 저장)
+function getApiKey(){ return localStorage.getItem('govbsr_api_key')||''; }
+function saveApiKey(){
+  const k=document.getElementById('api-key-input').value.trim();
+  if(!k||!k.startsWith('sk-ant-')){alert('올바른 Anthropic API 키를 입력하세요 (sk-ant-로 시작)');return;}
+  localStorage.setItem('govbsr_api_key',k);
+  updateApiBanner();
+  showToast('API 키가 저장되었습니다');
+}
+function updateApiBanner(){
+  const key=getApiKey();
+  const banner=document.getElementById('api-banner');
+  const text=document.getElementById('api-banner-text');
+  const inputWrap=document.getElementById('api-input-wrap');
+  const statusBadge=document.getElementById('api-status-badge');
+  if(key){
+    banner.className='api-banner ok';
+    text.textContent='✅ API 키 설정됨 — PDF AI 분석 사용 가능';
+    inputWrap.style.display='none';
+    statusBadge.innerHTML='<span class="badge badge-green">AI 분석 가능</span>';
+  } else {
+    banner.className='api-banner';
+    text.textContent='PDF AI 분석을 사용하려면 Anthropic API 키를 입력하세요 (이 기기에만 저장됩니다)';
+    inputWrap.style.display='flex';
+    statusBadge.innerHTML='<span class="badge badge-gray">API 키 필요</span>';
+  }
 }
 
-function loadBranch(branch) {
-  if(unsubscribe) { unsubscribe(); unsubscribe = null; }
+function branchRef(b){ return db.ref('govbsr/'+b.replace(/\s/g,'_')); }
+
+function loadBranch(branch){
+  if(unsubscribe){unsubscribe();unsubscribe=null;}
   document.getElementById('table-body').innerHTML='<tr><td colspan="9" class="loading">불러오는 중...</td></tr>';
   document.getElementById('card-list').innerHTML='<div class="loading">불러오는 중...</div>';
-
-  const ref = branchRef(branch);
-  const handler = ref.on('value', snap => {
-    try {
-      const val = snap.exists() ? snap.val() : {};
-      branchData = {};
-      if(val && typeof val === 'object') {
-        Object.keys(val).forEach(k => { branchData[k] = val[k]; });
-      }
+  const ref=branchRef(branch);
+  const handler=ref.on('value',snap=>{
+    try{
+      branchData={};
+      if(snap.exists()){const v=snap.val();if(v&&typeof v==='object')Object.keys(v).forEach(k=>{branchData[k]=v[k];});}
       renderContent();
-    } catch(e) {
-      console.error('데이터 로드 오류:', e);
-      branchData = {};
-      renderContent();
-    }
-  }, err => {
-    console.error('Firebase 오류:', err);
-    branchData = {};
-    renderContent();
-  });
-  unsubscribe = () => ref.off('value', handler);
+    }catch(e){branchData={};renderContent();}
+  },err=>{branchData={};renderContent();});
+  unsubscribe=()=>ref.off('value',handler);
 }
 
-function saveItem(item) {
-  const key = item.id;
-  branchRef(currentBranch).child(key).set(item);
-}
-
-function deleteItem(id) {
-  branchRef(currentBranch).child(id).remove();
-}
+function saveItem(item){ branchRef(currentBranch).child(item.id).set(item); }
+function deleteItem(id){ branchRef(currentBranch).child(id).remove(); }
 
 function badge(s){
   if(s==='계약 완료') return `<span class="badge badge-green">계약 완료</span>`;
@@ -318,7 +371,7 @@ function badge(s){
   return `<span class="badge badge-gray">미접촉</span>`;
 }
 function serviceBadges(s){
-  if(!s) return '—';
+  if(!s)return '—';
   return s.split(',').map(t=>`<span class="badge badge-blue">${t.trim()}</span>`).join('');
 }
 function today(){
@@ -327,16 +380,16 @@ function today(){
 }
 function showToast(msg){
   const t=document.getElementById('toast');
-  t.textContent=msg; t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'),2000);
+  t.textContent=msg;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2500);
 }
 
 function buildSidebar(){
   const pc=document.getElementById('pc-sidebar');
   const rTabs=document.getElementById('region-tabs');
-  pc.innerHTML=''; rTabs.innerHTML='';
+  pc.innerHTML='';rTabs.innerHTML='';
   REGIONS.forEach((r,ri)=>{
-    if(ri>0) pc.innerHTML+=`<div class="region-divider"></div>`;
+    if(ri>0)pc.innerHTML+=`<div class="region-divider"></div>`;
     pc.innerHTML+=`<div class="region-label">${r.name}</div>`;
     r.branches.forEach(b=>{
       pc.innerHTML+=`<div class="branch-item${b===currentBranch?' active':''}" onclick="selectBranch('${b}','${r.name}')">${b}</div>`;
@@ -345,36 +398,25 @@ function buildSidebar(){
   });
   buildChips();
 }
-
 function buildChips(){
   const chips=document.getElementById('branch-chips');
   chips.innerHTML='';
   const region=REGIONS.find(r=>r.name===currentRegion);
-  if(!region) return;
+  if(!region)return;
   region.branches.forEach(b=>{
     chips.innerHTML+=`<div class="branch-chip${b===currentBranch?' active':''}" onclick="selectBranch('${b}','${currentRegion}')">${b}</div>`;
   });
 }
-
 function selectRegion(name){
   currentRegion=name;
   const region=REGIONS.find(r=>r.name===name);
-  if(region && !region.branches.includes(currentBranch)){
-    currentBranch=region.branches[0];
-  }
-  buildSidebar();
-  updateHeader();
-  loadBranch(currentBranch);
+  if(region&&!region.branches.includes(currentBranch))currentBranch=region.branches[0];
+  buildSidebar();updateHeader();loadBranch(currentBranch);
 }
-
 function selectBranch(branch,region){
-  currentBranch=branch;
-  currentRegion=region;
-  buildSidebar();
-  updateHeader();
-  loadBranch(branch);
+  currentBranch=branch;currentRegion=region;
+  buildSidebar();updateHeader();loadBranch(branch);
 }
-
 function updateHeader(){
   document.getElementById('main-title').textContent=currentBranch+' — B2G 영업 현황';
   document.getElementById('main-sub').textContent='권역: '+currentRegion;
@@ -386,25 +428,21 @@ function getFiltered(){
   const sf=document.getElementById('filter-status').value;
   return rows.filter(r=>{
     const ms=!search||r.name.toLowerCase().includes(search)||(r.org||'').toLowerCase().includes(search)||(r.dept||'').toLowerCase().includes(search);
-    const mf=!sf||r.status===sf;
-    return ms&&mf;
+    return ms&&(!sf||r.status===sf);
   });
 }
 
 function renderContent(){
   const filtered=getFiltered();
   const all=Object.values(branchData);
-
   document.getElementById('stat-total').textContent=all.length;
   document.getElementById('stat-none').textContent=all.filter(r=>r.status==='미접촉').length;
   document.getElementById('stat-progress').textContent=all.filter(r=>r.status==='접촉 중'||r.status==='협의 중').length;
   document.getElementById('stat-done').textContent=all.filter(r=>r.status==='계약 완료').length;
 
-  const tbody=document.getElementById('table-body');
-  tbody.innerHTML=filtered.length===0
+  document.getElementById('table-body').innerHTML=filtered.length===0
     ?`<tr><td colspan="9" class="empty-state">등록된 사업이 없습니다</td></tr>`
-    :filtered.map(r=>`
-      <tr>
+    :filtered.map(r=>`<tr>
         <td>${r.org||'—'}</td>
         <td><span class="dept-tag">${r.dept||'—'}</span></td>
         <td style="font-weight:500">${r.name}</td>
@@ -416,30 +454,18 @@ function renderContent(){
         <td><button class="btn" style="padding:3px 8px;font-size:11px" onclick="openDetail('${r.id}')">상세</button></td>
       </tr>`).join('');
 
-  const cardList=document.getElementById('card-list');
-  cardList.innerHTML=filtered.length===0
+  document.getElementById('card-list').innerHTML=filtered.length===0
     ?`<div class="empty-state">등록된 사업이 없습니다<br><small style="color:#ccc;margin-top:6px;display:block">아래 + 버튼으로 추가하세요</small></div>`
-    :filtered.map(r=>`
-      <div class="biz-card" onclick="openDetail('${r.id}')">
-        <div class="card-top">
-          <div class="card-name">${r.name}</div>
-          ${badge(r.status)}
-        </div>
-        <div class="card-meta">
-          <span class="card-org">${r.org||''}</span>
-          ${r.dept?`<span class="card-dept">${r.dept}</span>`:''}
-        </div>
+    :filtered.map(r=>`<div class="biz-card" onclick="openDetail('${r.id}')">
+        <div class="card-top"><div class="card-name">${r.name}</div>${badge(r.status)}</div>
+        <div class="card-meta"><span class="card-org">${r.org||''}</span>${r.dept?`<span class="card-dept">${r.dept}</span>`:''}</div>
         <div class="card-services">${serviceBadges(r.service)}</div>
-        <div class="card-footer">
-          <span class="card-budget">${r.budget||''}</span>
-          <span class="card-person">${r.person||r.date||''}</span>
-        </div>
+        <div class="card-footer"><span class="card-budget">${r.budget||''}</span><span class="card-person">${r.person||r.date||''}</span></div>
       </div>`).join('');
 }
 
 function openDetail(id){
-  const r=branchData[id];
-  if(!r) return;
+  const r=branchData[id];if(!r)return;
   currentDetailId=id;
   document.getElementById('d-name').textContent=r.name;
   document.getElementById('d-status-badge').innerHTML=badge(r.status);
@@ -453,70 +479,198 @@ function openDetail(id){
   document.getElementById('d-status-select').value=r.status;
   document.getElementById('detail-bg').classList.add('open');
 }
-
-function closeDetail(){
-  document.getElementById('detail-bg').classList.remove('open');
-  currentDetailId=null;
-}
-
+function closeDetail(){document.getElementById('detail-bg').classList.remove('open');currentDetailId=null;}
 function updateStatus(){
-  if(!currentDetailId) return;
-  const r=branchData[currentDetailId];
-  if(!r) return;
+  if(!currentDetailId)return;
+  const r=branchData[currentDetailId];if(!r)return;
   r.status=document.getElementById('d-status-select').value;
-  if(r.status!=='미접촉' && !r.date) r.date=today();
+  if(r.status!=='미접촉'&&!r.date)r.date=today();
   document.getElementById('d-status-badge').innerHTML=badge(r.status);
-  saveItem(r);
-  showToast('상태가 저장되었습니다');
+  saveItem(r);showToast('상태가 저장되었습니다');
 }
-
 function deleteCurrentItem(){
-  if(!currentDetailId) return;
-  if(!confirm('삭제하시겠습니까?')) return;
-  deleteItem(currentDetailId);
-  closeDetail();
-  showToast('삭제되었습니다');
+  if(!currentDetailId)return;
+  if(!confirm('삭제하시겠습니까?'))return;
+  deleteItem(currentDetailId);closeDetail();showToast('삭제되었습니다');
 }
 
-function openModal(){ document.getElementById('modal').classList.add('open'); }
+function openModal(){document.getElementById('modal').classList.add('open');}
 function closeModal(){
   document.getElementById('modal').classList.remove('open');
   ['f-org','f-dept','f-name','f-service','f-budget','f-person','f-memo'].forEach(id=>document.getElementById(id).value='');
   document.getElementById('f-status').value='미접촉';
 }
-
 function addItem(){
   const name=document.getElementById('f-name').value.trim();
   if(!name){alert('사업명을 입력하세요.');return;}
   const status=document.getElementById('f-status').value;
   const id='item_'+Date.now();
-  const item={
-    id, org:document.getElementById('f-org').value.trim(),
-    dept:document.getElementById('f-dept').value.trim(), name,
-    service:document.getElementById('f-service').value.trim(),
-    budget:document.getElementById('f-budget').value.trim(),
-    status, person:document.getElementById('f-person').value.trim(),
-    date:status!=='미접촉'?today():'',
-    memo:document.getElementById('f-memo').value.trim(),
-    branch:currentBranch, createdAt:Date.now()
-  };
-  saveItem(item);
-  closeModal();
-  showToast('사업이 추가되었습니다');
+  saveItem({id,org:document.getElementById('f-org').value.trim(),dept:document.getElementById('f-dept').value.trim(),
+    name,service:document.getElementById('f-service').value.trim(),budget:document.getElementById('f-budget').value.trim(),
+    status,person:document.getElementById('f-person').value.trim(),date:status!=='미접촉'?today():'',
+    memo:document.getElementById('f-memo').value.trim(),branch:currentBranch,createdAt:Date.now()});
+  closeModal();showToast('사업이 추가되었습니다');
 }
 
-function handlePdf(input){
+// PDF 분석
+function triggerPdf(){
+  if(!getApiKey()){alert('먼저 상단에서 Anthropic API 키를 입력해주세요.');return;}
+  document.getElementById('pdf-input').click();
+}
+
+async function extractPdfText(file){
+  const arrayBuffer=await file.arrayBuffer();
+  const pdf=await pdfjsLib.getDocument({data:arrayBuffer}).promise;
+  let text='';
+  for(let i=1;i<=Math.min(pdf.numPages,30);i++){
+    const page=await pdf.getPage(i);
+    const content=await page.getTextContent();
+    text+=content.items.map(item=>item.str).join(' ')+'\n';
+  }
+  return text;
+}
+
+async function handlePdf(input){
   const file=input.files[0];
-  if(!file) return;
-  const r=document.getElementById('pdf-result');
-  r.style.display='block';
-  r.innerHTML=`<div style="padding:14px;background:#eff6ff;border-radius:8px;font-size:12px;color:#2563eb">📄 ${file.name} 업로드됨 — PDF AI 분석은 다음 단계에서 활성화됩니다.</div>`;
+  if(!file)return;
+  const apiKey=getApiKey();
+  if(!apiKey){alert('API 키를 먼저 입력해주세요.');return;}
+
+  const resultDiv=document.getElementById('pdf-result');
+  resultDiv.innerHTML=`<div class="analyzing"><span class="analyzing-spinner">⏳</span>PDF 텍스트 추출 중... (${file.name})</div>`;
+
+  try{
+    // PDF 텍스트 추출
+    const pdfText=await extractPdfText(file);
+
+    resultDiv.innerHTML=`<div class="analyzing"><span class="analyzing-spinner">🤖</span>AI가 세스코 연계 항목 분석 중...</div>`;
+
+    // Anthropic API 호출
+    const prompt=`다음은 지자체 예산서 PDF에서 추출한 텍스트입니다. 
+세스코(CESCO) 환경위생 서비스와 연계 가능한 예산 항목을 찾아서 JSON 배열로 반환해주세요.
+
+연계 가능한 키워드: 방역, 소독, 정수기, 공기청정기, 비데, 에어컨청소, 에어컨 청소, 위생, 환경위생, 식품위생, 청소용역, 해충, 방제, 살균, 임차료(정수기/공기청정기/비데)
+
+반드시 아래 JSON 형식만 반환하세요. 다른 텍스트 없이 JSON만:
+[
+  {
+    "org": "지자체명(예: 기장군청)",
+    "dept": "담당과명(예: 환경위생과)",
+    "name": "사업명",
+    "budget": "예산액(천원 단위, 예: 2,700천원)",
+    "service": "연계서비스(IPM/IHM/렌탈/FS/MYLAB 중 해당하는 것)"
+  }
+]
+
+service 분류 기준:
+- IPM: 방역, 소독, 해충, 방제, 살균
+- IHM: 에어컨청소, 청소용역
+- 렌탈: 정수기, 공기청정기, 비데 임차
+- FS: 식품위생, 위생컨설팅
+- MYLAB: 위생용품, 세정제
+
+PDF 텍스트:
+${pdfText.substring(0,8000)}`;
+
+    const response=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{
+        'Content-Type':'application/json',
+        'x-api-key':apiKey,
+        'anthropic-version':'2023-06-01',
+        'anthropic-dangerous-direct-browser-access':'true'
+      },
+      body:JSON.stringify({
+        model:'claude-haiku-4-5-20251001',
+        max_tokens:2000,
+        messages:[{role:'user',content:prompt}]
+      })
+    });
+
+    if(!response.ok){
+      const err=await response.json();
+      throw new Error(err.error?.message||'API 호출 실패');
+    }
+
+    const data=await response.json();
+    const rawText=data.content[0].text.trim();
+
+    // JSON 파싱
+    let items=[];
+    try{
+      const jsonMatch=rawText.match(/\[[\s\S]*\]/);
+      if(jsonMatch)items=JSON.parse(jsonMatch[0]);
+    }catch(e){
+      throw new Error('AI 응답 파싱 실패');
+    }
+
+    if(items.length===0){
+      resultDiv.innerHTML=`<div style="padding:16px;background:#f9fafb;border-radius:8px;font-size:13px;color:#888;text-align:center">
+        세스코 연계 가능한 항목을 찾지 못했습니다.<br><small>다른 과의 예산서를 업로드해보세요.</small></div>`;
+      return;
+    }
+
+    // 결과 표시 및 확인 모달
+    pdfExtractedItems=items;
+    showPdfModal(items, file.name);
+    resultDiv.innerHTML=`<div style="padding:12px;background:#f0fdf4;border-radius:8px;font-size:12px;color:#16a34a;font-weight:600">
+      ✅ ${items.length}개 항목 발견! 위 팝업에서 추가할 항목을 선택하세요.</div>`;
+
+  }catch(e){
+    resultDiv.innerHTML=`<div style="padding:14px;background:#fef2f2;border-radius:8px;font-size:12px;color:#dc2626">
+      ❌ 오류: ${e.message}</div>`;
+  }
+  input.value='';
+}
+
+function showPdfModal(items, filename){
+  document.getElementById('pdf-modal-branch').textContent=currentBranch;
+  document.getElementById('pdf-modal-items').innerHTML=`
+    <div style="font-size:11px;color:#999;margin-bottom:10px">파일: ${filename}</div>
+    <table class="pdf-result-table">
+      <thead><tr><th style="width:32px"><input type="checkbox" id="check-all" onchange="toggleAll(this)" checked></th><th>지자체</th><th>담당과</th><th>사업명</th><th>예산</th><th>서비스</th></tr></thead>
+      <tbody>${items.map((item,i)=>`
+        <tr>
+          <td><input type="checkbox" class="pdf-check" data-idx="${i}" checked></td>
+          <td>${item.org||'—'}</td>
+          <td>${item.dept||'—'}</td>
+          <td style="font-weight:500">${item.name}</td>
+          <td>${item.budget||'—'}</td>
+          <td><span class="badge badge-blue">${item.service||'—'}</span></td>
+        </tr>`).join('')}
+      </tbody>
+    </table>`;
+  document.getElementById('pdf-modal').classList.add('open');
+}
+
+function toggleAll(cb){
+  document.querySelectorAll('.pdf-check').forEach(c=>c.checked=cb.checked);
+}
+
+function closePdfModal(){document.getElementById('pdf-modal').classList.remove('open');}
+
+function addPdfItems(){
+  const checked=document.querySelectorAll('.pdf-check:checked');
+  let count=0;
+  checked.forEach(cb=>{
+    const item=pdfExtractedItems[parseInt(cb.dataset.idx)];
+    if(!item)return;
+    const id='item_'+Date.now()+'_'+Math.random().toString(36).substr(2,5);
+    saveItem({id,org:item.org||'',dept:item.dept||'',name:item.name,
+      service:item.service||'',budget:item.budget||'',status:'미접촉',
+      person:'',date:'',memo:'PDF 자동 추출',branch:currentBranch,createdAt:Date.now()});
+    count++;
+  });
+  closePdfModal();
+  showToast(`${count}개 항목이 추가되었습니다`);
 }
 
 document.getElementById('modal').addEventListener('click',function(e){if(e.target===this)closeModal();});
 document.getElementById('detail-bg').addEventListener('click',function(e){if(e.target===this)closeDetail();});
+document.getElementById('pdf-modal').addEventListener('click',function(e){if(e.target===this)closePdfModal();});
 
 // 초기화
+updateApiBanner();
 buildSidebar();
 updateHeader();
 loadBranch(currentBranch);
