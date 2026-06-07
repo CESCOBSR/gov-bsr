@@ -7,8 +7,6 @@
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 body{font-family:'Apple SD Gothic Neo','Malgun Gothic',sans-serif;background:#f4f6f9;color:#1a1a1a;min-height:100vh}
-
-/* ── PC 레이아웃 ── */
 .app{display:flex;height:100vh}
 .sidebar{width:190px;background:#fff;border-right:1px solid #e8e8e8;display:flex;flex-direction:column;flex-shrink:0}
 .sidebar-header{padding:16px 14px;border-bottom:1px solid #e8e8e8}
@@ -21,8 +19,6 @@ body{font-family:'Apple SD Gothic Neo','Malgun Gothic',sans-serif;background:#f4
 .branch-item.active{background:#eff6ff;color:#2563eb;border-color:#bfdbfe;font-weight:600}
 .region-divider{height:1px;background:#f0f0f0;margin:8px 4px}
 .main{flex:1;overflow-y:auto;padding:24px}
-
-/* ── 모바일 상단 탭 (기본 숨김) ── */
 .mobile-header{display:none;background:#fff;border-bottom:1px solid #e8e8e8;position:sticky;top:0;z-index:50}
 .mobile-logo-bar{padding:14px 16px 0;display:flex;align-items:center;justify-content:space-between}
 .mobile-logo{font-size:17px;font-weight:700}
@@ -35,12 +31,9 @@ body{font-family:'Apple SD Gothic Neo','Malgun Gothic',sans-serif;background:#f4
 .branch-chips::-webkit-scrollbar{display:none}
 .branch-chip{padding:6px 14px;border-radius:16px;font-size:12px;white-space:nowrap;cursor:pointer;background:#fff;color:#555;border:1px solid #e0e0e0;flex-shrink:0;transition:all 0.15s}
 .branch-chip.active{background:#eff6ff;color:#2563eb;border-color:#bfdbfe;font-weight:600}
-
-/* ── 공통 컨텐츠 ── */
 .page-header{margin-bottom:18px}
 .page-header h1{font-size:17px;font-weight:700;color:#1a1a1a}
 .page-header p{font-size:12px;color:#999;margin-top:3px}
-
 .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:18px}
 .stat-card{background:#fff;border:1px solid #e8e8e8;border-radius:10px;padding:12px 10px;text-align:center}
 .stat-label{font-size:10px;color:#999;margin-bottom:5px}
@@ -49,7 +42,6 @@ body{font-family:'Apple SD Gothic Neo','Malgun Gothic',sans-serif;background:#f4
 .stat-val.amber{color:#d97706}
 .stat-val.green{color:#16a34a}
 .stat-val.gray{color:#aaa}
-
 .toolbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;flex-wrap:wrap;gap:8px}
 .section-title{font-size:13px;font-weight:700;color:#1a1a1a}
 .toolbar-right{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
@@ -60,18 +52,14 @@ select{padding:7px 8px;font-size:12px;border-radius:8px;border:1px solid #e0e0e0
 .btn:hover{background:#f5f5f5}
 .btn-primary{background:#2563eb;color:#fff;border-color:#2563eb}
 .btn-primary:hover{background:#1d4ed8}
-
-/* PC 테이블 */
 .table-wrap{background:#fff;border:1px solid #e8e8e8;border-radius:10px;overflow:hidden;margin-bottom:20px}
 .table-wrap table{width:100%;border-collapse:collapse;font-size:12px}
 .table-wrap th{padding:9px 12px;text-align:left;font-weight:600;font-size:11px;color:#999;border-bottom:1px solid #e8e8e8;background:#fafafa;white-space:nowrap}
 .table-wrap td{padding:10px 12px;border-bottom:1px solid #f0f0f0;color:#1a1a1a;vertical-align:middle}
 .table-wrap tr:last-child td{border-bottom:none}
 .table-wrap tr:hover td{background:#fafeff}
-
-/* 모바일 카드 (기본 숨김) */
 .card-list{display:none;flex-direction:column;gap:10px;margin-bottom:80px}
-.biz-card{background:#fff;border:1px solid #e8e8e8;border-radius:12px;padding:14px 16px;cursor:pointer;transition:box-shadow 0.15s}
+.biz-card{background:#fff;border:1px solid #e8e8e8;border-radius:12px;padding:14px 16px;cursor:pointer;transition:all 0.15s}
 .biz-card:active{background:#f8fbff}
 .card-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:8px}
 .card-name{font-size:14px;font-weight:600;color:#1a1a1a;line-height:1.4;flex:1;margin-right:8px}
@@ -82,8 +70,6 @@ select{padding:7px 8px;font-size:12px;border-radius:8px;border:1px solid #e0e0e0
 .card-footer{display:flex;justify-content:space-between;align-items:center;margin-top:6px}
 .card-budget{font-size:11px;color:#888}
 .card-person{font-size:11px;color:#888}
-
-/* 배지 */
 .badge{display:inline-block;padding:3px 8px;border-radius:5px;font-size:11px;font-weight:600;margin-right:2px}
 .badge-gray{background:#f3f4f6;color:#6b7280}
 .badge-blue{background:#eff6ff;color:#2563eb}
@@ -91,19 +77,13 @@ select{padding:7px 8px;font-size:12px;border-radius:8px;border:1px solid #e0e0e0
 .badge-green{background:#f0fdf4;color:#16a34a;border:1px solid #bbf7d0}
 .dept-tag{display:inline-block;padding:2px 7px;border-radius:5px;font-size:11px;background:#f3f4f6;color:#555}
 .empty-state{padding:40px;text-align:center;color:#bbb;font-size:13px}
-
-/* 모바일 하단 고정 버튼 */
 .fab{display:none;position:fixed;bottom:24px;right:20px;background:#2563eb;color:#fff;border:none;border-radius:50px;padding:14px 22px;font-size:14px;font-weight:700;cursor:pointer;box-shadow:0 4px 16px rgba(37,99,235,0.35);z-index:100;font-family:inherit}
-
-/* PDF 업로드 */
 .upload-section{background:#fff;border:1px solid #e8e8e8;border-radius:10px;padding:20px;margin-bottom:20px}
 .upload-box{border:1.5px dashed #d1d5db;border-radius:8px;padding:24px;text-align:center;cursor:pointer;transition:all 0.15s}
 .upload-box:hover{border-color:#2563eb;background:#f8fbff}
 .upload-icon{font-size:26px;margin-bottom:8px}
 .upload-title{font-size:13px;font-weight:600;color:#374151;margin-bottom:4px}
 .upload-desc{font-size:12px;color:#9ca3af;line-height:1.5}
-
-/* 모달 */
 .modal-bg{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.45);z-index:200;align-items:flex-end;justify-content:center}
 .modal-bg.open{display:flex}
 .modal{background:#fff;border-radius:16px 16px 0 0;padding:20px 20px 32px;width:100%;max-width:560px;max-height:90vh;overflow-y:auto}
@@ -116,17 +96,16 @@ select{padding:7px 8px;font-size:12px;border-radius:8px;border:1px solid #e0e0e0
 .form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .modal-footer{display:flex;gap:8px;margin-top:16px}
 .modal-footer .btn{flex:1;padding:12px;font-size:13px;border-radius:10px}
-
-/* 상세 슬라이드 패널 */
-.detail-panel{display:none;position:fixed;top:0;right:0;width:360px;height:100%;background:#fff;box-shadow:-4px 0 24px rgba(0,0,0,0.1);z-index:150;overflow-y:auto;padding:20px}
-.detail-panel.open{display:block}
-.panel-close{background:none;border:none;font-size:20px;cursor:pointer;color:#888;float:right}
-.panel-title{font-size:16px;font-weight:700;margin-bottom:4px;padding-right:30px}
+.detail-panel{background:#fff;border-radius:16px 16px 0 0;padding:20px 20px 32px;width:100%;max-width:560px;max-height:90vh;overflow-y:auto}
+.panel-handle{width:36px;height:4px;background:#e0e0e0;border-radius:2px;margin:0 auto 16px}
+.panel-title{font-size:16px;font-weight:700;margin-bottom:8px}
 .panel-field{margin-bottom:14px}
 .panel-label{font-size:11px;color:#999;margin-bottom:3px;font-weight:600}
 .panel-value{font-size:13px;color:#1a1a1a}
-.status-select{width:100%;padding:8px 10px;font-size:13px;border:1px solid #e0e0e0;border-radius:8px;font-family:inherit;outline:none;margin-top:4px}
-
+.status-select{width:100%;padding:10px 12px;font-size:13px;border:1px solid #e0e0e0;border-radius:8px;font-family:inherit;outline:none;margin-top:4px;background:#fff}
+.loading{text-align:center;padding:30px;color:#999;font-size:13px}
+.toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#1a1a1a;color:#fff;padding:10px 20px;border-radius:20px;font-size:13px;z-index:300;opacity:0;transition:opacity 0.3s;pointer-events:none}
+.toast.show{opacity:1}
 @media(max-width:768px){
   .app{flex-direction:column;height:auto}
   .sidebar{display:none}
@@ -136,15 +115,12 @@ select{padding:7px 8px;font-size:12px;border-radius:8px;border:1px solid #e0e0e0
   .table-wrap{display:none}
   .card-list{display:flex}
   .fab{display:block}
-  .toolbar-right input[type=text]{width:120px}
-  .detail-panel{width:100%;border-radius:16px 16px 0 0;top:auto;bottom:0;height:85vh}
-  .modal-bg{align-items:flex-end}
+  .toolbar-right input[type=text]{width:110px}
 }
 </style>
 </head>
 <body>
 
-<!-- 모바일 상단 헤더 -->
 <div class="mobile-header">
   <div class="mobile-logo-bar">
     <div class="mobile-logo">GOV<span>-BSR</span></div>
@@ -155,28 +131,21 @@ select{padding:7px 8px;font-size:12px;border-radius:8px;border:1px solid #e0e0e0
 </div>
 
 <div class="app">
-  <!-- PC 사이드바 -->
   <div class="sidebar">
-    <div class="sidebar-header">
-      <div class="logo">GOV<span>-BSR</span></div>
-    </div>
+    <div class="sidebar-header"><div class="logo">GOV<span>-BSR</span></div></div>
     <div class="sidebar-body" id="pc-sidebar"></div>
   </div>
-
-  <!-- 메인 -->
   <div class="main">
     <div class="page-header">
       <h1 id="main-title">부산서부 — B2G 영업 현황</h1>
       <p id="main-sub">권역: 부산서부권역</p>
     </div>
-
     <div class="stats">
       <div class="stat-card"><div class="stat-label">전체 타겟</div><div class="stat-val blue" id="stat-total">0</div></div>
       <div class="stat-card"><div class="stat-label">미접촉</div><div class="stat-val gray" id="stat-none">0</div></div>
       <div class="stat-card"><div class="stat-label">접촉·협의</div><div class="stat-val amber" id="stat-progress">0</div></div>
       <div class="stat-card"><div class="stat-label">계약완료</div><div class="stat-val green" id="stat-done">0</div></div>
     </div>
-
     <div class="toolbar">
       <div class="section-title">타겟 사업 목록</div>
       <div class="toolbar-right">
@@ -188,27 +157,19 @@ select{padding:7px 8px;font-size:12px;border-radius:8px;border:1px solid #e0e0e0
           <option value="협의 중">협의 중</option>
           <option value="계약 완료">계약 완료</option>
         </select>
-        <button class="btn btn-primary pc-only" onclick="openModal()" style="display:inline-block">+ 추가</button>
+        <button class="btn btn-primary" onclick="openModal()">+ 추가</button>
       </div>
     </div>
-
-    <!-- PC 테이블 -->
     <div class="table-wrap">
       <table>
         <thead>
-          <tr>
-            <th>지자체</th><th>담당과</th><th>사업명</th><th>연계서비스</th>
-            <th>예산</th><th>상태</th><th>주무관</th><th>접촉일</th><th></th>
-          </tr>
+          <tr><th>지자체</th><th>담당과</th><th>사업명</th><th>연계서비스</th><th>예산</th><th>상태</th><th>주무관</th><th>접촉일</th><th></th></tr>
         </thead>
-        <tbody id="table-body"></tbody>
+        <tbody id="table-body"><tr><td colspan="9" class="loading">데이터 불러오는 중...</td></tr></tbody>
       </table>
     </div>
+    <div class="card-list" id="card-list"><div class="loading">데이터 불러오는 중...</div></div>
 
-    <!-- 모바일 카드 -->
-    <div class="card-list" id="card-list"></div>
-
-    <!-- PDF 업로드 -->
     <div class="upload-section">
       <div class="toolbar" style="margin-bottom:12px">
         <div class="section-title">📄 PDF 예산서 분석</div>
@@ -225,8 +186,8 @@ select{padding:7px 8px;font-size:12px;border-radius:8px;border:1px solid #e0e0e0
   </div>
 </div>
 
-<!-- 모바일 FAB -->
 <button class="fab" onclick="openModal()">+ 사업 추가</button>
+<div class="toast" id="toast"></div>
 
 <!-- 사업 추가 모달 -->
 <div class="modal-bg" id="modal">
@@ -245,9 +206,7 @@ select{padding:7px 8px;font-size:12px;border-radius:8px;border:1px solid #e0e0e0
     <div class="form-row">
       <div class="form-group">
         <label>상태</label>
-        <select id="f-status">
-          <option>미접촉</option><option>접촉 중</option><option>협의 중</option><option>계약 완료</option>
-        </select>
+        <select id="f-status"><option>미접촉</option><option>접촉 중</option><option>협의 중</option><option>계약 완료</option></select>
       </div>
       <div class="form-group"><label>주무관</label><input type="text" id="f-person" placeholder="예) 김○○ 주무관"></div>
     </div>
@@ -261,8 +220,8 @@ select{padding:7px 8px;font-size:12px;border-radius:8px;border:1px solid #e0e0e0
 
 <!-- 상세 패널 -->
 <div class="modal-bg" id="detail-bg" onclick="closeDetail()">
-  <div class="detail-panel" id="detail-panel" onclick="event.stopPropagation()">
-    <button class="panel-close" onclick="closeDetail()">✕</button>
+  <div class="detail-panel" onclick="event.stopPropagation()">
+    <div class="panel-handle"></div>
     <div class="panel-title" id="d-name"></div>
     <div style="margin-bottom:16px" id="d-status-badge"></div>
     <div class="panel-field"><div class="panel-label">지자체</div><div class="panel-value" id="d-org"></div></div>
@@ -271,7 +230,7 @@ select{padding:7px 8px;font-size:12px;border-radius:8px;border:1px solid #e0e0e0
     <div class="panel-field"><div class="panel-label">예산규모</div><div class="panel-value" id="d-budget"></div></div>
     <div class="panel-field"><div class="panel-label">주무관</div><div class="panel-value" id="d-person"></div></div>
     <div class="panel-field"><div class="panel-label">최종 접촉일</div><div class="panel-value" id="d-date"></div></div>
-    <div class="panel-field"><div class="panel-label">메모</div><div class="panel-value" id="d-memo"></div></div>
+    <div class="panel-field"><div class="panel-label">메모</div><div class="panel-value" id="d-memo" style="white-space:pre-wrap"></div></div>
     <div class="panel-field">
       <div class="panel-label">상태 변경</div>
       <select class="status-select" id="d-status-select" onchange="updateStatus()">
@@ -285,7 +244,18 @@ select{padding:7px 8px;font-size:12px;border-radius:8px;border:1px solid #e0e0e0
   </div>
 </div>
 
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+
 <script>
+// Firebase 초기화
+const firebaseConfig = {
+  databaseURL: "https://gov-bsr-default-rtdb.asia-southeast1.firebasedatabase.app"
+};
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
+
 const REGIONS = [
   {name:'부산동부권역', branches:['부산동래','부산수영','부산진구','부산기장','해운대']},
   {name:'부산서부권역', branches:['부산서부','부산남부','부산북부','부산사하','김해남부','김해북부']},
@@ -297,17 +267,35 @@ const REGIONS = [
 let currentBranch = '부산서부';
 let currentRegion = '부산서부권역';
 let currentDetailId = null;
+let branchData = {};
+let unsubscribe = null;
 
-let data = {
-  '부산서부':[
-    {id:1,org:'사하구청',dept:'일자리경제과',name:'착한가격업소 위생지원',service:'IPM, IHM',budget:'18,000천원',status:'협의 중',person:'김○○ 주무관',date:'2026.06.02',memo:'업체 리스트 수령 완료'},
-    {id:2,org:'서구청',dept:'환경위생과',name:'공공시설 방역 연간계약',service:'IPM',budget:'12,000천원',status:'계약 완료',person:'이○○ 주무관',date:'2026.05.20',memo:''},
-    {id:3,org:'사상구청',dept:'총무과',name:'청사 정수기·공기청정기 임차',service:'렌탈',budget:'8,400천원',status:'접촉 중',person:'박○○ 주무관',date:'2026.06.05',memo:''},
-    {id:4,org:'강서구청',dept:'보건위생과',name:'식품위생 컨설팅 지원사업',service:'FS, MYLAB',budget:'15,000천원',status:'미접촉',person:'',date:'',memo:''},
-    {id:5,org:'서구청',dept:'복지정책과',name:'경로당 방역 지원사업',service:'IPM',budget:'9,600천원',status:'미접촉',person:'',date:'',memo:''},
-  ]
-};
-let nextId = 100;
+// Firebase 경로 — /govbsr/ 아래에만 저장 (떴GO 데이터와 완전 분리)
+function branchRef(branch) {
+  return db.ref('govbsr/' + branch.replace(/\s/g,'_'));
+}
+
+function loadBranch(branch) {
+  if(unsubscribe) unsubscribe();
+  document.getElementById('table-body').innerHTML='<tr><td colspan="9" class="loading">불러오는 중...</td></tr>';
+  document.getElementById('card-list').innerHTML='<div class="loading">불러오는 중...</div>';
+
+  unsubscribe = branchRef(branch).on('value', snap => {
+    const val = snap.val() || {};
+    branchData = {};
+    Object.keys(val).forEach(k => { branchData[k] = val[k]; });
+    renderContent();
+  });
+}
+
+function saveItem(item) {
+  const key = item.id;
+  branchRef(currentBranch).child(key).set(item);
+}
+
+function deleteItem(id) {
+  branchRef(currentBranch).child(id).remove();
+}
 
 function badge(s){
   if(s==='계약 완료') return `<span class="badge badge-green">계약 완료</span>`;
@@ -323,10 +311,15 @@ function today(){
   const d=new Date();
   return d.getFullYear()+'.'+String(d.getMonth()+1).padStart(2,'0')+'.'+String(d.getDate()).padStart(2,'0');
 }
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2000);
+}
 
 function buildSidebar(){
-  const pc = document.getElementById('pc-sidebar');
-  const rTabs = document.getElementById('region-tabs');
+  const pc=document.getElementById('pc-sidebar');
+  const rTabs=document.getElementById('region-tabs');
   pc.innerHTML=''; rTabs.innerHTML='';
   REGIONS.forEach((r,ri)=>{
     if(ri>0) pc.innerHTML+=`<div class="region-divider"></div>`;
@@ -334,15 +327,15 @@ function buildSidebar(){
     r.branches.forEach(b=>{
       pc.innerHTML+=`<div class="branch-item${b===currentBranch?' active':''}" onclick="selectBranch('${b}','${r.name}')">${b}</div>`;
     });
-    rTabs.innerHTML+=`<div class="region-tab${r.name===currentRegion?' active':''}" onclick="selectRegion('${r.name}',${ri})">${r.name.replace('권역','')}</div>`;
+    rTabs.innerHTML+=`<div class="region-tab${r.name===currentRegion?' active':''}" onclick="selectRegion('${r.name}')">${r.name.replace('권역','')}</div>`;
   });
   buildChips();
 }
 
 function buildChips(){
-  const chips = document.getElementById('branch-chips');
+  const chips=document.getElementById('branch-chips');
   chips.innerHTML='';
-  const region = REGIONS.find(r=>r.name===currentRegion);
+  const region=REGIONS.find(r=>r.name===currentRegion);
   if(!region) return;
   region.branches.forEach(b=>{
     chips.innerHTML+=`<div class="branch-chip${b===currentBranch?' active':''}" onclick="selectBranch('${b}','${currentRegion}')">${b}</div>`;
@@ -357,15 +350,15 @@ function selectRegion(name){
   }
   buildSidebar();
   updateHeader();
-  renderContent();
+  loadBranch(currentBranch);
 }
 
-function selectBranch(branch, region){
+function selectBranch(branch,region){
   currentBranch=branch;
   currentRegion=region;
   buildSidebar();
   updateHeader();
-  renderContent();
+  loadBranch(branch);
 }
 
 function updateHeader(){
@@ -374,11 +367,11 @@ function updateHeader(){
 }
 
 function getFiltered(){
-  const rows=data[currentBranch]||[];
+  const rows=Object.values(branchData);
   const search=document.getElementById('search-input').value.toLowerCase();
   const sf=document.getElementById('filter-status').value;
   return rows.filter(r=>{
-    const ms=!search||r.name.toLowerCase().includes(search)||r.org.toLowerCase().includes(search)||r.dept.toLowerCase().includes(search);
+    const ms=!search||r.name.toLowerCase().includes(search)||(r.org||'').toLowerCase().includes(search)||(r.dept||'').toLowerCase().includes(search);
     const mf=!sf||r.status===sf;
     return ms&&mf;
   });
@@ -386,15 +379,13 @@ function getFiltered(){
 
 function renderContent(){
   const filtered=getFiltered();
-  const all=data[currentBranch]||[];
+  const all=Object.values(branchData);
 
-  // 통계
   document.getElementById('stat-total').textContent=all.length;
   document.getElementById('stat-none').textContent=all.filter(r=>r.status==='미접촉').length;
   document.getElementById('stat-progress').textContent=all.filter(r=>r.status==='접촉 중'||r.status==='협의 중').length;
   document.getElementById('stat-done').textContent=all.filter(r=>r.status==='계약 완료').length;
 
-  // PC 테이블
   const tbody=document.getElementById('table-body');
   tbody.innerHTML=filtered.length===0
     ?`<tr><td colspan="9" class="empty-state">등록된 사업이 없습니다</td></tr>`
@@ -408,15 +399,14 @@ function renderContent(){
         <td>${badge(r.status)}</td>
         <td>${r.person||'—'}</td>
         <td>${r.date||'—'}</td>
-        <td><button class="btn" style="padding:3px 8px;font-size:11px" onclick="openDetail(${r.id})">상세</button></td>
+        <td><button class="btn" style="padding:3px 8px;font-size:11px" onclick="openDetail('${r.id}')">상세</button></td>
       </tr>`).join('');
 
-  // 모바일 카드
   const cardList=document.getElementById('card-list');
   cardList.innerHTML=filtered.length===0
     ?`<div class="empty-state">등록된 사업이 없습니다<br><small style="color:#ccc;margin-top:6px;display:block">아래 + 버튼으로 추가하세요</small></div>`
     :filtered.map(r=>`
-      <div class="biz-card" onclick="openDetail(${r.id})">
+      <div class="biz-card" onclick="openDetail('${r.id}')">
         <div class="card-top">
           <div class="card-name">${r.name}</div>
           ${badge(r.status)}
@@ -434,8 +424,7 @@ function renderContent(){
 }
 
 function openDetail(id){
-  const all=data[currentBranch]||[];
-  const r=all.find(x=>x.id===id);
+  const r=branchData[id];
   if(!r) return;
   currentDetailId=id;
   document.getElementById('d-name').textContent=r.name;
@@ -449,62 +438,57 @@ function openDetail(id){
   document.getElementById('d-memo').textContent=r.memo||'—';
   document.getElementById('d-status-select').value=r.status;
   document.getElementById('detail-bg').classList.add('open');
-  document.getElementById('detail-panel').classList.add('open');
 }
 
 function closeDetail(){
   document.getElementById('detail-bg').classList.remove('open');
-  document.getElementById('detail-panel').classList.remove('open');
   currentDetailId=null;
 }
 
 function updateStatus(){
   if(!currentDetailId) return;
-  const newStatus=document.getElementById('d-status-select').value;
-  const all=data[currentBranch]||[];
-  const r=all.find(x=>x.id===currentDetailId);
+  const r=branchData[currentDetailId];
   if(!r) return;
-  r.status=newStatus;
-  if(newStatus!=='미접촉' && !r.date) r.date=today();
-  document.getElementById('d-status-badge').innerHTML=badge(newStatus);
-  renderContent();
+  r.status=document.getElementById('d-status-select').value;
+  if(r.status!=='미접촉' && !r.date) r.date=today();
+  document.getElementById('d-status-badge').innerHTML=badge(r.status);
+  saveItem(r);
+  showToast('상태가 저장되었습니다');
 }
 
 function deleteCurrentItem(){
   if(!currentDetailId) return;
   if(!confirm('삭제하시겠습니까?')) return;
-  data[currentBranch]=(data[currentBranch]||[]).filter(r=>r.id!==currentDetailId);
+  deleteItem(currentDetailId);
   closeDetail();
-  renderContent();
+  showToast('삭제되었습니다');
 }
 
-function openModal(){
-  document.getElementById('modal').classList.add('open');
-}
+function openModal(){ document.getElementById('modal').classList.add('open'); }
 function closeModal(){
   document.getElementById('modal').classList.remove('open');
   ['f-org','f-dept','f-name','f-service','f-budget','f-person','f-memo'].forEach(id=>document.getElementById(id).value='');
   document.getElementById('f-status').value='미접촉';
 }
+
 function addItem(){
   const name=document.getElementById('f-name').value.trim();
   if(!name){alert('사업명을 입력하세요.');return;}
-  if(!data[currentBranch]) data[currentBranch]=[];
   const status=document.getElementById('f-status').value;
-  data[currentBranch].push({
-    id:nextId++,
-    org:document.getElementById('f-org').value.trim(),
-    dept:document.getElementById('f-dept').value.trim(),
-    name,
+  const id='item_'+Date.now();
+  const item={
+    id, org:document.getElementById('f-org').value.trim(),
+    dept:document.getElementById('f-dept').value.trim(), name,
     service:document.getElementById('f-service').value.trim(),
     budget:document.getElementById('f-budget').value.trim(),
-    status,
-    person:document.getElementById('f-person').value.trim(),
+    status, person:document.getElementById('f-person').value.trim(),
     date:status!=='미접촉'?today():'',
-    memo:document.getElementById('f-memo').value.trim()
-  });
+    memo:document.getElementById('f-memo').value.trim(),
+    branch:currentBranch, createdAt:Date.now()
+  };
+  saveItem(item);
   closeModal();
-  renderContent();
+  showToast('사업이 추가되었습니다');
 }
 
 function handlePdf(input){
@@ -512,15 +496,16 @@ function handlePdf(input){
   if(!file) return;
   const r=document.getElementById('pdf-result');
   r.style.display='block';
-  r.innerHTML=`<div style="padding:14px;background:#eff6ff;border-radius:8px;font-size:12px;color:#2563eb">📄 ${file.name} 업로드됨 — PDF AI 분석 기능은 Firebase 연동 후 활성화됩니다.</div>`;
+  r.innerHTML=`<div style="padding:14px;background:#eff6ff;border-radius:8px;font-size:12px;color:#2563eb">📄 ${file.name} 업로드됨 — PDF AI 분석은 다음 단계에서 활성화됩니다.</div>`;
 }
 
 document.getElementById('modal').addEventListener('click',function(e){if(e.target===this)closeModal();});
+document.getElementById('detail-bg').addEventListener('click',function(e){if(e.target===this)closeDetail();});
 
 // 초기화
 buildSidebar();
 updateHeader();
-renderContent();
+loadBranch(currentBranch);
 </script>
 </body>
 </html>
