@@ -152,7 +152,11 @@ select{padding:7px 8px;font-size:12px;border-radius:8px;border:1px solid #e0e0e0
 <div class="app">
   <div class="sidebar">
     <div class="sidebar-header"><div class="logo">GOV<span>-BSR</span></div></div>
-    <div class="sidebar-body" id="pc-sidebar"></div>
+    <div class="sidebar-body">
+      <div class="branch-item" id="total-menu" onclick="showTotalView()" style="font-weight:700;color:#2563eb;background:#eff6ff;border-color:#bfdbfe;margin-bottom:6px">&#128202; 전체 현황</div>
+      <div class="region-divider"></div>
+      <div id="pc-sidebar"></div>
+    </div>
   </div>
   <div class="main">
 
@@ -168,6 +172,25 @@ select{padding:7px 8px;font-size:12px;border-radius:8px;border:1px solid #e0e0e0
       </div>
     </div>
 
+    <div id="total-view" style="display:none">
+      <div class="page-header"><h1>&#128202; 전체 현황</h1><p>부경사업부 24개 지사 B2G 영업 현황</p></div>
+      <div class="stats" style="margin-bottom:18px">
+        <div class="stat-card"><div class="stat-label">전체 타겟</div><div class="stat-val blue" id="t-total">-</div></div>
+        <div class="stat-card"><div class="stat-label">미접촉</div><div class="stat-val gray" id="t-none">-</div></div>
+        <div class="stat-card"><div class="stat-label">접촉·협의</div><div class="stat-val amber" id="t-progress">-</div></div>
+        <div class="stat-card"><div class="stat-label">계약완료</div><div class="stat-val green" id="t-done">-</div></div>
+      </div>
+      <div class="toolbar" style="margin-bottom:12px">
+        <div class="section-title">지사별 현황</div>
+        <button class="btn" onclick="exportAllExcel()" style="background:#16a34a;color:#fff;border-color:#16a34a">&#128229; 전체 엑셀</button>
+      </div>
+      <div class="table-wrap" style="margin-bottom:20px">
+        <table><thead><tr><th>권역</th><th>지사</th><th>전체</th><th>미접촉</th><th>접촉·협의</th><th>계약완료</th><th>계약률</th></tr></thead>
+        <tbody id="total-table-body"><tr><td colspan="7" class="loading">불러오는 중...</td></tr></tbody></table>
+      </div>
+      <div id="total-card-list" style="flex-direction:column;gap:8px;margin-bottom:80px"></div>
+    </div>
+    <div id="branch-view">
     <div class="page-header">
       <h1 id="main-title">부산서부 — B2G 영업 현황</h1>
       <p id="main-sub">권역: 부산서부권역</p>
@@ -217,6 +240,7 @@ select{padding:7px 8px;font-size:12px;border-radius:8px;border:1px solid #e0e0e0
         <button class="btn btn-primary" style="margin-top:12px" onclick="event.stopPropagation();triggerPdf()">파일 선택</button>
       </div>
       <div id="pdf-result" style="margin-top:14px"></div>
+    </div>
     </div>
   </div>
 </div>
@@ -688,6 +712,111 @@ function addPdfItems(){
   });
   closePdfModal();
   showToast(`${count}개 항목이 추가되었습니다`);
+}
+
+let allBranchData={};
+
+async function showTotalView(){
+  document.getElementById("total-view").style.display="block";
+  document.getElementById("branch-view").style.display="none";
+  document.getElementById("total-menu").style.cssText="font-weight:700;background:#2563eb;color:#fff;border-color:#2563eb;margin-bottom:6px;padding:8px 10px;border-radius:6px;cursor:pointer;font-size:12px;border:1px solid";
+  document.querySelectorAll(".branch-item:not(#total-menu)").forEach(el=>el.classList.remove("active"));
+  document.getElementById("total-table-body").innerHTML="<tr><td colspan=7 class=loading>전체 데이터 불러오는 중...</td></tr>";
+  const allBranches=REGIONS.flatMap(r=>r.branches);
+  allBranchData={};
+  let loaded=0;
+  allBranches.forEach(branch=>{
+    const ref=db?db.ref("govbsr/"+branch.replace(/\s/g,"_")):null;
+    if(!ref){loaded++;if(loaded===allBranches.length)renderTotalView();return;}
+    ref.once("value",snap=>{
+      allBranchData[branch]={};
+      if(snap.exists()){const v=snap.val();if(v&&typeof v==="object")Object.keys(v).forEach(k=>{allBranchData[branch][k]=v[k];});}
+      loaded++;
+      if(loaded===allBranches.length)renderTotalView();
+    });
+  });
+}
+
+function renderTotalView(){
+  let tAll=0,tNone=0,tProg=0,tDone=0,rows="",cards="";
+  REGIONS.forEach(region=>{
+    region.branches.forEach((branch,bi)=>{
+      const items=Object.values(allBranchData[branch]||{});
+      const all=items.length,none=items.filter(r=>r.status==="미접촉").length;
+      const prog=items.filter(r=>r.status==="접촉 중"||r.status==="협의 중").length;
+      const done=items.filter(r=>r.status==="계약 완료").length;
+      const rate=all>0?Math.round(done/all*100):0;
+      tAll+=all;tNone+=none;tProg+=prog;tDone+=done;
+      rows+=`<tr style="cursor:pointer" onclick="selectBranch('${branch}','${region.name}');showBranchView()">
+        ${bi===0?`<td rowspan="${region.branches.length}" style="font-size:11px;font-weight:600;color:#888;vertical-align:top;padding-top:12px">${region.name.replace("권역","")}</td>`:""}
+        <td style="font-weight:500">${branch}</td>
+        <td style="text-align:center">${all||"-"}</td>
+        <td style="text-align:center;color:#aaa">${none||"-"}</td>
+        <td style="text-align:center;color:#d97706">${prog||"-"}</td>
+        <td style="text-align:center;color:#16a34a;font-weight:600">${done||"-"}</td>
+        <td style="text-align:center"><span style="font-size:11px;font-weight:600;color:${rate>=50?"#16a34a":rate>=20?"#d97706":"#aaa"}">${all>0?rate+"%":"-"}</span></td>
+      </tr>`;
+      cards+=`<div class="biz-card" onclick="selectBranch('${branch}','${region.name}');showBranchView()">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div><div style="font-size:11px;color:#999;margin-bottom:2px">${region.name.replace("권역","")}</div>
+          <div style="font-size:14px;font-weight:600">${branch}</div></div>
+          <div style="text-align:right"><div style="font-size:20px;font-weight:700;color:#2563eb">${all||0}</div>
+          <div style="font-size:10px;color:#999">전체 타겟</div></div>
+        </div>
+        <div style="display:flex;gap:6px;margin-top:8px;flex-wrap:wrap">
+          <span class="badge badge-gray">미접촉 ${none}</span>
+          <span class="badge badge-amber">진행 ${prog}</span>
+          <span class="badge badge-green">완료 ${done}</span>
+          ${all>0?`<span style="font-size:11px;font-weight:600;color:${rate>=50?"#16a34a":rate>=20?"#d97706":"#aaa"};margin-left:auto">${rate}%</span>`:""}
+        </div>
+      </div>`;
+    });
+  });
+  document.getElementById("t-total").textContent=tAll;
+  document.getElementById("t-none").textContent=tNone;
+  document.getElementById("t-progress").textContent=tProg;
+  document.getElementById("t-done").textContent=tDone;
+  document.getElementById("total-table-body").innerHTML=rows||"<tr><td colspan=7 class=empty-state>데이터 없음</td></tr>";
+  const cl=document.getElementById("total-card-list");
+  cl.innerHTML=cards;
+  cl.style.display=window.innerWidth<=768?"flex":"none";
+}
+
+function showBranchView(){
+  document.getElementById("total-view").style.display="none";
+  document.getElementById("branch-view").style.display="block";
+  document.getElementById("total-menu").style.cssText="font-weight:700;color:#2563eb;background:#eff6ff;border-color:#bfdbfe;margin-bottom:6px;padding:8px 10px;border-radius:6px;cursor:pointer;font-size:12px;border:1px solid";
+}
+
+async function exportAllExcel(){
+  if(Object.keys(allBranchData).length===0){showToast("먼저 전체현황을 열어주세요");return;}
+  const wb=XLSX.utils.book_new();
+  const sumRows=[["권역","지사","전체","미접촉","접촉중","협의중","계약완료","계약률"]];
+  REGIONS.forEach(region=>{
+    region.branches.forEach(branch=>{
+      const items=Object.values(allBranchData[branch]||{});
+      const all=items.length;
+      const none=items.filter(r=>r.status==="미접촉").length;
+      const contact=items.filter(r=>r.status==="접촉 중").length;
+      const discuss=items.filter(r=>r.status==="협의 중").length;
+      const done=items.filter(r=>r.status==="계약 완료").length;
+      sumRows.push([region.name,branch,all,none,contact,discuss,done,all>0?Math.round(done/all*100)+"%":"0%"]);
+    });
+  });
+  const wss=XLSX.utils.aoa_to_sheet(sumRows);
+  wss["!cols"]=[{wch:14},{wch:12},{wch:8},{wch:8},{wch:8},{wch:8},{wch:10},{wch:8}];
+  XLSX.utils.book_append_sheet(wb,wss,"전체요약");
+  REGIONS.flatMap(r=>r.branches).forEach(branch=>{
+    const items=Object.values(allBranchData[branch]||{});
+    if(!items.length)return;
+    const rows=[["지자체","담당과","사업명","연계서비스","수량","예산규모","상태","주무관","최종접촉일","메모"]];
+    items.forEach(r=>rows.push([r.org||"",r.dept||"",r.name||"",r.service||"",r.quantity||"",r.budget||"",r.status||"",r.person||"",r.date||"",r.memo||""]));
+    const ws=XLSX.utils.aoa_to_sheet(rows);
+    ws["!cols"]=[{wch:12},{wch:14},{wch:24},{wch:12},{wch:14},{wch:12},{wch:10},{wch:12},{wch:12},{wch:24}];
+    XLSX.utils.book_append_sheet(wb,ws,branch.substring(0,31));
+  });
+  XLSX.writeFile(wb,"GOV-BSR_전체현황_"+today().replace(/\./g,"")+".xlsx");
+  showToast("전체 엑셀 다운로드 완료!");
 }
 
 function exportExcel(){
