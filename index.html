@@ -100,14 +100,12 @@ select{padding:7px 8px;font-size:12px;border-radius:8px;border:1px solid #e0e0e0
 .form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .modal-footer{display:flex;gap:8px;margin-top:16px}
 .modal-footer .btn{flex:1;padding:12px;font-size:13px;border-radius:10px}
-/* 상세 패널 */
 .detail-panel{background:#fff;border-radius:16px 16px 0 0;padding:20px 20px 32px;width:100%;max-width:560px;max-height:90vh;overflow-y:auto}
 .panel-handle{width:36px;height:4px;background:#e0e0e0;border-radius:2px;margin:0 auto 16px}
 .panel-title{font-size:16px;font-weight:700;margin-bottom:8px}
 .panel-field{margin-bottom:14px}
 .panel-label{font-size:11px;color:#999;margin-bottom:3px;font-weight:600}
 .panel-value{font-size:13px;color:#1a1a1a}
-/* 수정 모드 필드 */
 .edit-field{width:100%;padding:8px 10px;font-size:13px;border:1px solid #bfdbfe;border-radius:8px;font-family:inherit;color:#1a1a1a;outline:none;background:#f8fbff}
 .edit-field:focus{border-color:#2563eb;background:#fff}
 .edit-mode-banner{background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:10px 14px;margin-bottom:14px;font-size:12px;color:#2563eb;font-weight:600}
@@ -127,7 +125,6 @@ select{padding:7px 8px;font-size:12px;border-radius:8px;border:1px solid #e0e0e0
 .pdf-result-table th{padding:6px 8px;background:#eff6ff;color:#1e40af;font-weight:600;text-align:left;border-bottom:1px solid #bfdbfe}
 .pdf-result-table td{padding:6px 8px;border-bottom:1px solid #e0effe;color:#1a1a1a;vertical-align:middle}
 .pdf-result-table tr:last-child td{border-bottom:none}
-/* PDF 모달 지자체 수동입력 */
 .pdf-org-input{width:100%;padding:6px 8px;font-size:11px;border:1px solid #e0e0e0;border-radius:6px;font-family:inherit;outline:none;background:#fff}
 .pdf-org-input:focus{border-color:#2563eb}
 .pdf-org-input.filled{background:#eff6ff;border-color:#bfdbfe;color:#1e40af;font-weight:600}
@@ -243,7 +240,7 @@ select{padding:7px 8px;font-size:12px;border-radius:8px;border:1px solid #e0e0e0
       <div class="upload-box" onclick="triggerPdf()">
         <div class="upload-icon">📁</div>
         <div class="upload-title">예산서 PDF 업로드</div>
-        <div class="upload-desc">클릭해서 업로드 — AI가 세스코 연계 항목을 자동 추출합니다<br><small style="color:#bbb">(방역, 정수기, 공기청정기, 비데, 위생, 소독, 에어컨 청소 등)</small></div>
+        <div class="upload-desc">클릭해서 업로드 — AI가 세스코 연계 항목을 자동 추출합니다<br><small style="color:#bbb">(방역·소독·해충, 청소·화장실·핸드드라이어, 정수기·공기청정기·비데, 식품위생·HACCP, 착한가격업소 등)</small></div>
         <input type="file" id="pdf-input" accept=".pdf" style="display:none" onchange="handlePdf(this)">
         <button class="btn btn-primary" style="margin-top:12px" onclick="event.stopPropagation();triggerPdf()">파일 선택</button>
       </div>
@@ -285,12 +282,10 @@ select{padding:7px 8px;font-size:12px;border-radius:8px;border:1px solid #e0e0e0
   </div>
 </div>
 
-<!-- 상세 패널 (수정 기능 포함) -->
+<!-- 상세 패널 -->
 <div class="modal-bg" id="detail-bg">
   <div class="detail-panel" onclick="event.stopPropagation()">
     <div class="panel-handle"></div>
-
-    <!-- 보기 모드 -->
     <div id="detail-view-mode">
       <div class="panel-title" id="d-name"></div>
       <div style="margin-bottom:16px" id="d-status-badge"></div>
@@ -313,8 +308,6 @@ select{padding:7px 8px;font-size:12px;border-radius:8px;border:1px solid #e0e0e0
         <button class="btn" style="padding:12px;color:#dc2626;border-color:#fca5a5" onclick="deleteCurrentItem()">삭제</button>
       </div>
     </div>
-
-    <!-- 수정 모드 -->
     <div id="detail-edit-mode" style="display:none">
       <div class="edit-mode-banner">✏️ 수정 모드 — 변경 후 저장을 눌러주세요</div>
       <div class="form-group">
@@ -362,7 +355,6 @@ select{padding:7px 8px;font-size:12px;border-radius:8px;border:1px solid #e0e0e0
         <button class="btn btn-primary" style="flex:2;padding:12px" onclick="saveEditedItem()">💾 저장</button>
       </div>
     </div>
-
   </div>
 </div>
 
@@ -404,7 +396,6 @@ const REGIONS = [
   {name:'경남서부권역',branches:['진주동부','진주서부','거제통영','사천남해']}
 ];
 
-// 지자체 목록 (지사별 담당 관할 지자체)
 const JURISDICTION_MAP = {
   '부산동래':['동래구청','연제구청'],
   '부산수영':['수영구청'],
@@ -432,7 +423,6 @@ const JURISDICTION_MAP = {
   '사천남해':['사천시청','남해군청']
 };
 
-// 공통 지자체 목록 (PDF 모달 드롭다운용)
 const ALL_GOV_LIST = [
   '중구청','서구청','동구청','영도구청','부산진구청','동래구청','남구청','북구청',
   '해운대구청','사하구청','금정구청','강서구청','연제구청','수영구청','사상구청','기장군청',
@@ -598,14 +588,11 @@ function renderContent(){
       </div>`).join('');
 }
 
-// ── 상세 패널 ─────────────────────────────────────────────
 function openDetail(id){
   const r=branchData[id];if(!r)return;
   currentDetailId=id;
-  // 보기 모드로 시작
   document.getElementById('detail-view-mode').style.display='block';
   document.getElementById('detail-edit-mode').style.display='none';
-  // 데이터 표시
   document.getElementById('d-name').textContent=r.name;
   document.getElementById('d-status-badge').innerHTML=badge(r.status);
   document.getElementById('d-org').textContent=r.org||'미기재';
@@ -623,7 +610,6 @@ function switchToEditMode(){
   const r=branchData[currentDetailId];if(!r)return;
   document.getElementById('detail-view-mode').style.display='none';
   document.getElementById('detail-edit-mode').style.display='block';
-  // 수정 필드 채우기
   document.getElementById('e-name').value=r.name||'';
   document.getElementById('e-org').value=r.org||'';
   document.getElementById('e-dept').value=r.dept||'';
@@ -654,7 +640,6 @@ function saveEditedItem(){
   r.memo=document.getElementById('e-memo').value.trim();
   if(newStatus!=='미접촉'&&!r.date)r.date=today();
   saveItem(r);
-  // 보기 모드로 돌아가며 반영
   document.getElementById('d-name').textContent=r.name;
   document.getElementById('d-status-badge').innerHTML=badge(r.status);
   document.getElementById('d-org').textContent=r.org||'미기재';
@@ -720,7 +705,6 @@ async function extractPdfText(file){
   return text;
 }
 
-// PDF 텍스트에서 지자체명 사전 추출 (AI 호출 전 보조)
 function guessOrgFromText(text){
   const patterns=[
     /([가-힣]+(?:광역시|특별시|특별자치시|도))\s*([가-힣]+(?:구|군|시))/g,
@@ -736,7 +720,6 @@ function guessOrgFromText(text){
       if(full.length>=3&&full.length<=12)candidates.add(full);
     }
   }
-  // ALL_GOV_LIST와 교차 검증
   for(const gov of ALL_GOV_LIST){
     const bare=gov.replace('청','');
     if(text.includes(bare))candidates.add(gov);
@@ -755,31 +738,57 @@ async function handlePdf(input){
 
   try{
     const pdfText=await extractPdfText(file);
-
-    // 사전 지자체 추출
     const guessedOrgs=guessOrgFromText(pdfText);
 
     resultDiv.innerHTML=`<div class="analyzing"><span class="analyzing-spinner">🤖</span>AI가 세스코 연계 항목 분석 중...</div>`;
 
+    // ★ 개선된 프롬프트 — 키워드 기반 무조건 추출, AI 자의 판단 금지
     const prompt=`다음은 지자체 예산서 PDF에서 추출한 텍스트입니다.
-세스코(CESCO) 환경위생 서비스와 연계 가능한 예산 항목을 찾아서 JSON 배열로 반환해주세요.
+아래 키워드 목록 중 하나라도 포함된 예산 항목을 빠짐없이 모두 추출하여 JSON 배열로 반환하세요.
+애매하거나 간접적으로 연관되어도 반드시 포함하세요. 스스로 판단해서 제외하지 마세요.
 
-【지자체 판별 방법 — 매우 중요】
-PDF 표지나 본문 상단에서 지자체명을 반드시 추출하세요.
-예시 패턴: "○○구청", "○○군청", "○○시청", "부산광역시 ○○구", "경상남도 ○○시" 등
+【추출 대상 키워드 — 하나라도 포함되면 무조건 추출】
+▶ 방역/소독/해충
+방역, 방제, 소독, 해충, 살균, 구서, 구충, 방충, 병해충, 쥐, 바퀴, 빈대, 진드기, 모기, 파리, 흰개미, 해충방제, 방역용역, 방역대행, 소독약, 방역약품, 방역물품
+
+▶ 청소/환경위생
+청소, 청소용역, 청소대행, 환경미화, 미화원, 환경청소, 청결, 에어컨청소, 에어컨 청소, 후드청소, 그리스트랩, 덕트청소, 냉각탑청소
+
+▶ 화장실/위생시설
+화장실, 공중화장실, 위생시설, 화장실위생, 화장실청소
+
+▶ 핸드드라이어
+핸드드라이어, 핸드드라이, 손건조기
+
+▶ 렌탈/임차
+정수기, 공기청정기, 비데, 냉온수기, 음수대, 정수, 렌탈, 임차료, 임대, 리스
+
+▶ 위생관리/컨설팅
+위생, 위생관리, 위생용역, 위생컨설팅, 위생점검, 위생교육, 위생검사, 환경위생, 위생지원, 위생개선
+
+▶ 식품위생/HACCP
+식품위생, 식품안전, HACCP, 집단급식, 급식위생, 학교급식, 식품제조, 식품가공, 식품업소
+
+▶ 착한가격/소상공인/전통시장
+착한가격업소, 착한가격, 소상공인, 소상공인위생, 전통시장, 전통시장위생
+
+▶ 위생용품/소모품
+위생용품, 세정제, 살균제, 소독제, 위생소모품
+
+▶ 취약계층/복지시설
+취약계층위생, 복지시설위생, 노인시설위생, 어린이집위생, 사회복지시설위생
+
+【지자체 판별 — 반드시 추출】
+PDF 표지나 본문 상단에서 지자체명을 추출하세요.
 텍스트 앞부분 힌트: ${pdfText.substring(0,500)}
 사전 분석된 지자체 후보: ${guessedOrgs.length>0?guessedOrgs.join(', '):'(자동 추출 실패 — AI가 직접 판단)'}
 
-연계 가능한 키워드:
-- 방역/소독: 방역, 소독, 해충, 방제, 살균, 쥐잡기, 구서, 구충, 방충, 해충방제, 병해충
-- 청소/위생: 에어컨청소, 후드청소, 그리스트랩, 청소용역, 환경청소
-- 렌탈: 정수기, 공기청정기, 비데, 냉온수기 임차/렌탈
-- 위생/식품: 위생, 환경위생, 식품위생, 위생점검, 위생컨설팅, 위생관리
-- 지원사업: 착한가격업소, 소상공인위생, 전통시장위생, 위생지원
+【출력 규칙】
+- 위 키워드 중 하나라도 포함된 항목은 무조건 추출 (스스로 판단해서 제외 금지)
+- 감액(△ 또는 -) 사업만 제외, 나머지는 전부 포함
+- 세부 항목(용역비, 임차료, 대행료 등)도 포함
+- 반드시 JSON 배열만 반환 (설명 텍스트 없이):
 
-추경예산서의 경우 "예산액"을 우선, 없으면 "기정액" 사용. 감액(-) 사업 제외.
-
-반드시 아래 JSON 형식만 반환 (다른 텍스트 없이):
 [
   {
     "org": "지자체명(예: 기장군청, 사하구청 — 반드시 입력, 모르면 빈문자열)",
@@ -791,12 +800,12 @@ PDF 표지나 본문 상단에서 지자체명을 반드시 추출하세요.
   }
 ]
 
-service 분류:
-- IPM: 방역, 소독, 해충, 방제, 살균, 구서, 구충, 방충, 병해충
-- IHM: 에어컨청소, 후드청소, 그리스트랩, 청소용역, 환경청소
-- 렌탈: 정수기, 공기청정기, 비데, 냉온수기 임차/렌탈
-- FS: 식품위생, 위생컨설팅, 위생점검, 위생교육, 위생관리
-- MYLAB: 위생용품, 세정제, 살균제, 소독제, 방역약품
+【service 분류 기준】
+- IPM: 방역, 소독, 해충, 방제, 살균, 구서, 구충, 방충, 병해충, 쥐, 바퀴, 빈대, 진드기
+- IHM: 청소, 에어컨청소, 후드청소, 그리스트랩, 환경청소, 덕트청소, 핸드드라이어, 화장실청소, 환경미화
+- 렌탈: 정수기, 공기청정기, 비데, 냉온수기, 음수대 임차/렌탈
+- FS: 식품위생, 위생컨설팅, 위생점검, 위생교육, 위생관리, HACCP, 착한가격업소, 소상공인위생
+- MYLAB: 위생용품, 세정제, 살균제, 소독제, 위생소모품
 
 PDF 텍스트:
 ${pdfText.substring(0,8000)}`;
@@ -850,11 +859,8 @@ ${pdfText.substring(0,8000)}`;
   input.value='';
 }
 
-// PDF 모달 — 지자체 수동 입력/선택 포함
 function showPdfModal(items, filename, guessedOrgs){
   document.getElementById('pdf-modal-branch').textContent=currentBranch;
-
-  // 현재 지사의 관할 지자체 + 전체 목록으로 드롭다운
   const jurisdictions=JURISDICTION_MAP[currentBranch]||[];
   const priorityList=[...new Set([...jurisdictions,...ALL_GOV_LIST])];
   const optionHtml='<option value="">-- 선택 --</option>'+priorityList.map(g=>`<option value="${g}">${g}</option>`).join('');
@@ -872,9 +878,9 @@ function showPdfModal(items, filename, guessedOrgs){
         return `<tr>
           <td><input type="checkbox" class="pdf-check" data-idx="${i}" checked></td>
           <td>
-            <input type="text" class="pdf-org-input${hasOrg?' filled':''}" 
-              id="pdf-org-${i}" 
-              value="${item.org||''}" 
+            <input type="text" class="pdf-org-input${hasOrg?' filled':''}"
+              id="pdf-org-${i}"
+              value="${item.org||''}"
               placeholder="직접입력 또는▼"
               list="gov-datalist"
               oninput="this.classList.toggle('filled',this.value.length>0)">
@@ -908,7 +914,6 @@ function addPdfItems(){
     const idx=parseInt(cb.dataset.idx);
     const item=pdfExtractedItems[idx];
     if(!item)return;
-    // 수동 입력된 지자체 우선
     const orgInput=document.getElementById(`pdf-org-${idx}`);
     const finalOrg=orgInput?orgInput.value.trim():(item.org||'');
     const id='item_'+Date.now()+'_'+Math.random().toString(36).substr(2,5);
