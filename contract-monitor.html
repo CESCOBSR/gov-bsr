@@ -9,57 +9,39 @@
 body{font-family:'Apple SD Gothic Neo','Malgun Gothic',sans-serif;background:#f4f6f9;color:#1a1a1a;min-height:100vh}
 .header{background:#fff;border-bottom:1px solid #e8e8e8;padding:14px 24px;display:flex;align-items:center;gap:12px}
 .logo{font-size:16px;font-weight:700}.logo span{color:#2563eb}
-.header-sub{font-size:12px;color:#999}
 .main{padding:20px;max-width:1300px;margin:0 auto}
-.api-banner{background:#fffbeb;border:1px solid #fde68a;border-radius:10px;padding:14px 16px;margin-bottom:14px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
-.api-banner.ok{background:#f0fdf4;border-color:#bbf7d0}
-.api-banner-text{font-size:12px;color:#92400e;flex:1}
-.api-banner.ok .api-banner-text{color:#166534}
-.api-input-wrap{display:flex;gap:6px;align-items:center;width:100%}
-.api-input-wrap input{flex:1;padding:8px 10px;font-size:12px;border-radius:8px;border:1px solid #e0e0e0;font-family:inherit;outline:none}
 .card{background:#fff;border:1px solid #e8e8e8;border-radius:10px;padding:18px;margin-bottom:14px}
-.card-title{font-size:13px;font-weight:700;margin-bottom:12px;color:#1a1a1a}
+.card-title{font-size:13px;font-weight:700;margin-bottom:12px}
 .section-label{font-size:11px;color:#666;font-weight:600;margin-bottom:6px}
 .chip-wrap{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:12px}
 .kw-chip{padding:5px 11px;border-radius:20px;font-size:11px;cursor:pointer;border:1px solid #e0e0e0;background:#fff;color:#555;transition:all 0.15s;user-select:none}
 .kw-chip.active{background:#2563eb;color:#fff;border-color:#2563eb}
-.region-section{margin-bottom:12px}
 .region-block{margin-bottom:10px}
-.region-name{font-size:11px;font-weight:700;color:#888;margin-bottom:5px;letter-spacing:0.04em}
+.region-name{font-size:11px;font-weight:700;color:#888;margin-bottom:5px}
 .branch-chips{display:flex;flex-wrap:wrap;gap:4px}
 .br-chip{padding:4px 10px;border-radius:14px;font-size:11px;cursor:pointer;border:1px solid #e0e0e0;background:#fff;color:#555;transition:all 0.15s;user-select:none}
 .br-chip.active{background:#ea580c;color:#fff;border-color:#ea580c}
-.select-btns{display:flex;gap:6px;margin-bottom:10px}
+.select-btns{display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap}
 .filter-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-bottom:12px}
 .filter-group label{font-size:11px;color:#666;font-weight:600;display:block;margin-bottom:4px}
 .filter-group input,.filter-group select{width:100%;padding:7px 10px;font-size:12px;border:1px solid #e0e0e0;border-radius:8px;font-family:inherit;outline:none;background:#fff}
 .btn{padding:7px 14px;font-size:12px;border-radius:8px;border:1px solid #e0e0e0;background:#fff;color:#1a1a1a;cursor:pointer;font-family:inherit;font-weight:600;transition:all 0.15s}
 .btn:hover{background:#f5f5f5}
 .btn-primary{background:#2563eb;color:#fff;border-color:#2563eb}
-.btn-primary:hover{background:#1d4ed8}
 .btn-green{background:#16a34a;color:#fff;border-color:#16a34a}
-.btn-green:hover{background:#15803d}
 .btn-sm{padding:4px 10px;font-size:11px}
-.progress-wrap{display:none;margin-top:10px}
-.progress-text{font-size:11px;color:#2563eb;margin-bottom:4px}
-.progress-bar{background:#e8e8e8;border-radius:4px;height:6px;overflow:hidden}
-.progress-fill{background:#2563eb;height:100%;border-radius:4px;transition:width 0.2s}
 .stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px}
 .stat-card{background:#fff;border:1px solid #e8e8e8;border-radius:10px;padding:12px;text-align:center}
 .stat-label{font-size:10px;color:#999;margin-bottom:4px}
 .stat-val{font-size:20px;font-weight:700;color:#2563eb}
-/* 탭 */
 .view-tabs{display:flex;gap:6px;margin-bottom:12px}
 .view-tab{padding:7px 16px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;border:1px solid #e0e0e0;background:#fff;color:#888}
 .view-tab.active{background:#2563eb;color:#fff;border-color:#2563eb}
-/* 지사별 뷰 */
-.branch-group{background:#fff;border:1px solid #e8e8e8;border-radius:10px;margin-bottom:12px;overflow:hidden}
-.branch-group-header{padding:12px 16px;background:#fafafa;border-bottom:1px solid #e8e8e8;display:flex;align-items:center;justify-content:space-between;cursor:pointer}
+.branch-group{background:#fff;border:1px solid #e8e8e8;border-radius:10px;margin-bottom:10px;overflow:hidden}
+.branch-group-header{padding:11px 16px;background:#fafafa;border-bottom:1px solid #e8e8e8;display:flex;align-items:center;justify-content:space-between;cursor:pointer}
 .branch-group-title{font-size:13px;font-weight:700}
-.branch-group-meta{font-size:11px;color:#999}
 .branch-group-body{display:none}
 .branch-group-body.open{display:block}
-/* 테이블 */
 .table-wrap{background:#fff;border:1px solid #e8e8e8;border-radius:10px;overflow:hidden;margin-bottom:14px}
 .table-header{padding:11px 16px;border-bottom:1px solid #e8e8e8;display:flex;align-items:center;justify-content:space-between}
 table{width:100%;border-collapse:collapse;font-size:12px}
@@ -73,7 +55,9 @@ tr:hover td{background:#fafeff}
 .badge-rental{background:#eff6ff;color:#2563eb}
 .badge-fs{background:#f0fdf4;color:#16a34a}
 .badge-etc{background:#f3f4f6;color:#6b7280}
-.cesco-row{background:#eff6ff!important}
+.cesco-row td{background:#eff6ff!important}
+.info-banner{background:#eff6ff;border:1px solid #bfdbfe;border-radius:10px;padding:14px 16px;margin-bottom:14px;font-size:12px;color:#1e40af;line-height:1.8}
+.loading{text-align:center;padding:40px;color:#999;font-size:13px}
 .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#1a1a1a;color:#fff;padding:10px 20px;border-radius:20px;font-size:13px;z-index:300;opacity:0;transition:opacity 0.3s;pointer-events:none;white-space:nowrap}
 .toast.show{opacity:1}
 @media(max-width:768px){
@@ -87,7 +71,7 @@ tr:hover td{background:#fafeff}
 
 <div class="header">
   <div class="logo">GOV<span>-BSR</span></div>
-  <div class="header-sub">계약현황 모니터</div>
+  <span style="font-size:12px;color:#999">계약현황 모니터</span>
   <div style="margin-left:auto">
     <a href="https://cescobsr.github.io/gov-bsr/" style="font-size:12px;color:#2563eb;text-decoration:none">← GOV-BSR</a>
   </div>
@@ -95,41 +79,32 @@ tr:hover td{background:#fafeff}
 
 <div class="main">
 
-  <div class="api-banner" id="api-banner">
-    <div style="font-size:18px">🔑</div>
-    <div style="flex:1">
-      <div class="api-banner-text" id="api-banner-text">지방재정365 API 키를 입력하세요</div>
-      <div class="api-input-wrap" id="api-input-wrap" style="margin-top:8px">
-        <input type="password" id="api-key-input" placeholder="lofin365 인증키 입력">
-        <button class="btn btn-primary" onclick="saveApiKey()">저장</button>
-      </div>
-    </div>
+  <div class="info-banner" id="info-banner">
+    ⏳ 데이터 불러오는 중...
   </div>
 
   <div class="card">
-    <div class="card-title">🔍 검색 조건</div>
+    <div class="card-title">🔍 필터</div>
 
-    <!-- 키워드 -->
-    <div class="section-label">세스코 연계 키워드 (복수 선택)</div>
+    <div class="section-label">키워드 필터</div>
     <div class="chip-wrap" id="kw-chips">
       <div class="kw-chip active" data-kw="방역">🦟 방역</div>
       <div class="kw-chip active" data-kw="소독">🧴 소독</div>
       <div class="kw-chip active" data-kw="해충">🐛 해충</div>
-      <div class="kw-chip" data-kw="방제">방제</div>
-      <div class="kw-chip" data-kw="살균">살균</div>
-      <div class="kw-chip" data-kw="정수기">💧 정수기</div>
-      <div class="kw-chip" data-kw="공기청정기">🌬️ 공기청정기</div>
-      <div class="kw-chip" data-kw="비데">비데</div>
-      <div class="kw-chip" data-kw="냉온수기">냉온수기</div>
-      <div class="kw-chip" data-kw="청소용역">🧹 청소용역</div>
-      <div class="kw-chip" data-kw="에어컨청소">에어컨청소</div>
-      <div class="kw-chip" data-kw="위생">위생</div>
-      <div class="kw-chip" data-kw="식품위생">식품위생</div>
-      <div class="kw-chip" data-kw="착한가격">착한가격</div>
+      <div class="kw-chip active" data-kw="방제">방제</div>
+      <div class="kw-chip active" data-kw="살균">살균</div>
+      <div class="kw-chip active" data-kw="정수기">💧 정수기</div>
+      <div class="kw-chip active" data-kw="공기청정기">🌬️ 공기청정기</div>
+      <div class="kw-chip active" data-kw="비데">비데</div>
+      <div class="kw-chip active" data-kw="냉온수기">냉온수기</div>
+      <div class="kw-chip active" data-kw="청소용역">🧹 청소용역</div>
+      <div class="kw-chip active" data-kw="에어컨청소">에어컨청소</div>
+      <div class="kw-chip active" data-kw="위생">위생</div>
+      <div class="kw-chip active" data-kw="식품위생">식품위생</div>
+      <div class="kw-chip active" data-kw="착한가격">착한가격</div>
     </div>
 
-    <!-- 지사 선택 -->
-    <div class="section-label">지사 선택 (복수 선택)</div>
+    <div class="section-label">지사 필터</div>
     <div class="select-btns">
       <button class="btn btn-sm" onclick="selectAllBranches()">전체 선택</button>
       <button class="btn btn-sm" onclick="deselectAllBranches()">전체 해제</button>
@@ -137,16 +112,15 @@ tr:hover td{background:#fafeff}
       <button class="btn btn-sm" onclick="selectRegion('울산')">울산만</button>
       <button class="btn btn-sm" onclick="selectRegion('경남')">경남만</button>
     </div>
-    <div class="region-section" id="branch-selector"></div>
+    <div id="branch-selector"></div>
 
-    <!-- 날짜/필터 -->
-    <div class="filter-grid">
+    <div class="filter-grid" style="margin-top:12px">
       <div class="filter-group">
-        <label>계약 시작일</label>
+        <label>계약일 시작</label>
         <input type="date" id="date-from">
       </div>
       <div class="filter-group">
-        <label>계약 종료일</label>
+        <label>계약일 종료</label>
         <input type="date" id="date-to">
       </div>
       <div class="filter-group">
@@ -160,22 +134,17 @@ tr:hover td{background:#fafeff}
       </div>
       <div class="filter-group">
         <label>업체명</label>
-        <input type="text" id="company-filter" placeholder="예) 세스코, 시티캅">
+        <input type="text" id="company-filter" placeholder="예) 세스코, 시티캅" oninput="applyFilter()">
       </div>
     </div>
 
-    <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
-      <button class="btn btn-primary" onclick="startSearch()">🔍 검색 시작</button>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn btn-primary" onclick="applyFilter()">🔍 필터 적용</button>
       <button class="btn btn-green" onclick="exportExcel()">📥 엑셀</button>
-      <button class="btn" onclick="resetAll()">초기화</button>
-    </div>
-    <div class="progress-wrap" id="progress-wrap">
-      <div class="progress-text" id="progress-text">검색 중...</div>
-      <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+      <button class="btn" onclick="resetFilter()">초기화</button>
     </div>
   </div>
 
-  <!-- 통계 -->
   <div class="stats-row" id="stats-row" style="display:none">
     <div class="stat-card"><div class="stat-label">전체 계약건수</div><div class="stat-val" id="s-total">0</div></div>
     <div class="stat-card"><div class="stat-label">총 계약금액</div><div class="stat-val" style="font-size:14px;color:#16a34a" id="s-amount">0</div></div>
@@ -183,21 +152,18 @@ tr:hover td{background:#fafeff}
     <div class="stat-card"><div class="stat-label">세스코 계약</div><div class="stat-val" style="color:#2563eb" id="s-cesco">0</div></div>
   </div>
 
-  <!-- 뷰 탭 -->
   <div class="view-tabs" id="view-tabs" style="display:none">
     <div class="view-tab active" onclick="switchView('branch')" id="tab-branch">📍 지사별 보기</div>
     <div class="view-tab" onclick="switchView('list')" id="tab-list">📋 전체 목록</div>
   </div>
 
-  <!-- 지사별 뷰 -->
   <div id="branch-view"></div>
 
-  <!-- 전체 목록 뷰 -->
   <div id="list-view" style="display:none">
     <div class="table-wrap">
       <div class="table-header">
         <div style="font-size:13px;font-weight:700">전체 목록 <span id="list-count" style="color:#2563eb"></span></div>
-        <input type="text" id="table-search" placeholder="검색..." style="padding:6px 10px;font-size:12px;border:1px solid #e0e0e0;border-radius:8px;outline:none;width:160px" oninput="filterList()">
+        <input type="text" id="table-search" placeholder="검색..." style="padding:6px 10px;font-size:12px;border:1px solid #e0e0e0;border-radius:8px;outline:none;width:160px" oninput="renderListView(currentFiltered)">
       </div>
       <div style="overflow-x:auto">
         <table>
@@ -216,238 +182,57 @@ tr:hover td{background:#fafeff}
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script>
-const REGIONS = [
-  {name:'부산동부권역', branches:['부산동래','부산수영','부산진구','부산기장','해운대']},
-  {name:'부산서부권역', branches:['부산서부','부산남부','부산북부','부산사하','김해남부','김해북부']},
-  {name:'울산양산권역', branches:['울산북부','울산남부','울산서부','울산중부','양산']},
-  {name:'경남동부권역', branches:['창원동부','창원서부','창원남부','창원북부']},
-  {name:'경남서부권역', branches:['진주동부','진주서부','거제통영','사천남해']}
+const REGIONS=[
+  {name:'부산동부권역',branches:['부산동래','부산수영','부산진구','부산기장','해운대']},
+  {name:'부산서부권역',branches:['부산서부','부산남부','부산북부','부산사하','김해남부','김해북부']},
+  {name:'울산양산권역',branches:['울산북부','울산남부','울산서부','울산중부','양산']},
+  {name:'경남동부권역',branches:['창원동부','창원서부','창원남부','창원북부']},
+  {name:'경남서부권역',branches:['진주동부','진주서부','거제통영','사천남해']}
 ];
 
-const JURISDICTION_MAP = {
-  '부산동래':['동래구','연제구'],
-  '부산수영':['수영구'],
-  '부산진구':['부산진구'],
-  '부산기장':['기장군'],
-  '해운대':['해운대구','금정구'],
-  '부산서부':['서구','중구','동구','영도구'],
-  '부산남부':['남구'],
-  '부산북부':['북구','사상구'],
-  '부산사하':['사하구','강서구'],
-  '김해남부':['김해시'],
-  '김해북부':['김해시'],
-  '울산북부':['북구','울주군'],
-  '울산남부':['남구'],
-  '울산서부':['울주군'],
-  '울산중부':['중구','동구'],
-  '양산':['양산시'],
-  '창원동부':['창원시','의창구','성산구'],
-  '창원서부':['창원시','마산합포구','마산회원구'],
-  '창원남부':['창원시','진해구'],
-  '창원북부':['창원시'],
-  '진주동부':['진주시'],
-  '진주서부':['진주시','사천시','남해군','하동군','산청군','함양군','거창군','합천군'],
-  '거제통영':['거제시','통영시','고성군'],
-  '사천남해':['사천시','남해군']
-};
+let rawData=[];
+let currentFiltered=[];
+let currentView='branch';
 
-// 지사 선택기 렌더링
+// 지사 선택기
 function buildBranchSelector(){
   const el=document.getElementById('branch-selector');
   el.innerHTML=REGIONS.map(r=>`
     <div class="region-block">
       <div class="region-name">${r.name}</div>
-      <div class="branch-chips">
-        ${r.branches.map(b=>`<div class="br-chip active" data-branch="${b}" onclick="toggleBranch(this)">${b}</div>`).join('')}
-      </div>
+      <div class="branch-chips">${r.branches.map(b=>`<div class="br-chip active" data-branch="${b}" onclick="this.classList.toggle('active');applyFilter()">${b}</div>`).join('')}</div>
     </div>`).join('');
 }
-
-function toggleBranch(el){el.classList.toggle('active');}
-function selectAllBranches(){document.querySelectorAll('.br-chip').forEach(c=>c.classList.add('active'));}
-function deselectAllBranches(){document.querySelectorAll('.br-chip').forEach(c=>c.classList.remove('active'));}
-function selectRegion(keyword){
+function selectAllBranches(){document.querySelectorAll('.br-chip').forEach(c=>c.classList.add('active'));applyFilter();}
+function deselectAllBranches(){document.querySelectorAll('.br-chip').forEach(c=>c.classList.remove('active'));applyFilter();}
+function selectRegion(kw){
   deselectAllBranches();
   document.querySelectorAll('.br-chip').forEach(c=>{
     const b=c.dataset.branch;
-    const region=REGIONS.find(r=>r.branches.includes(b));
-    if(region&&region.name.includes(keyword==='부산'?'부산':keyword==='울산'?'울산':'경남'))
-      c.classList.add('active');
+    const r=REGIONS.find(r=>r.branches.includes(b));
+    if(r&&r.name.includes(kw==='부산'?'부산':kw==='울산'?'울산':'경남'))c.classList.add('active');
   });
+  applyFilter();
 }
-
-function getActiveBranches(){
-  return [...document.querySelectorAll('.br-chip.active')].map(c=>c.dataset.branch);
-}
-function getActiveKeywords(){
-  return [...document.querySelectorAll('.kw-chip.active')].map(c=>c.dataset.kw);
-}
-
-// 날짜 초기화
-const today=new Date();
-const oneYearAgo=new Date(today);oneYearAgo.setFullYear(today.getFullYear()-1);
-document.getElementById('date-from').value=oneYearAgo.toISOString().split('T')[0];
-document.getElementById('date-to').value=today.toISOString().split('T')[0];
-
-// API 키
-function getApiKey(){return localStorage.getItem('lofin_api_key')||'';}
-function saveApiKey(){
-  const k=document.getElementById('api-key-input').value.trim();
-  if(!k){alert('API 키를 입력하세요.');return;}
-  localStorage.setItem('lofin_api_key',k);
-  updateApiBanner();showToast('API 키가 저장되었습니다');
-}
-function updateApiBanner(){
-  const key=getApiKey();
-  const banner=document.getElementById('api-banner');
-  const text=document.getElementById('api-banner-text');
-  const inputWrap=document.getElementById('api-input-wrap');
-  if(key){
-    banner.className='api-banner ok';
-    text.textContent='✅ API 키 설정됨 — 계약현황 조회 가능';
-    inputWrap.style.display='none';
-  } else {
-    banner.className='api-banner';
-    text.textContent='지방재정365 API 키를 입력하세요';
-    inputWrap.style.display='flex';
-  }
-}
+function getActiveBranches(){return[...document.querySelectorAll('.br-chip.active')].map(c=>c.dataset.branch);}
+function getActiveKeywords(){return[...document.querySelectorAll('.kw-chip.active')].map(c=>c.dataset.kw);}
 
 function showToast(msg){
   const t=document.getElementById('toast');
   t.textContent=msg;t.classList.add('show');
   setTimeout(()=>t.classList.remove('show'),2500);
 }
-
-// 날짜 배열
-function getDateRange(fromStr,toStr){
-  const dates=[];
-  const from=new Date(fromStr),to=new Date(toStr);
-  const cur=new Date(from);
-  while(cur<=to){
-    dates.push(cur.toISOString().split('T')[0].replace(/-/g,''));
-    cur.setDate(cur.getDate()+1);
-  }
-  return dates;
+function formatAmt(v){
+  const n=parseInt(v||0);if(isNaN(n))return'—';
+  if(n>=100000000)return(n/100000000).toFixed(1)+'억';
+  if(n>=10000)return Math.round(n/10000)+'만원';
+  return n.toLocaleString()+'원';
 }
-
-// 지자체명 → 지사 매핑
-function findBranchByOrg(orgName){
-  if(!orgName)return null;
-  for(const [branch,orgs] of Object.entries(JURISDICTION_MAP)){
-    if(orgs.some(o=>orgName.includes(o)))return branch;
-  }
-  return null;
+function formatDate(d){
+  if(!d||d.length!==8)return d||'—';
+  return`${d.slice(0,4)}.${d.slice(4,6)}.${d.slice(6,8)}`;
 }
-
-// 시도명 → 관할 지사 후보
-function getBranchesBySido(sido){
-  if(!sido)return[];
-  if(sido.includes('부산'))return REGIONS.filter(r=>r.name.includes('부산')).flatMap(r=>r.branches);
-  if(sido.includes('울산')||sido.includes('양산'))return REGIONS.find(r=>r.name.includes('울산'))?.branches||[];
-  if(sido.includes('경남')||sido.includes('경상남'))return REGIONS.filter(r=>r.name.includes('경남')||r.name.includes('경남서부')||r.name.includes('경남동부')).flatMap(r=>r.branches);
-  return[];
-}
-
-let allResults=[];
-let isSearching=false;
-
-async function fetchData(apiKey,keyword,date){
-  const url=`https://www.lofin365.go.kr/lf/hub/WCEGCF?Key=${apiKey}&Type=json&pIndex=1&pSize=1000&ctrt_trgt_nm=${encodeURIComponent(keyword)}&smz_ctrt_ymd=${date}`;
-  try{
-    const resp=await fetch(url);
-    if(!resp.ok)return[];
-    const data=await resp.json();
-    return data?.WCEGCF?.[1]?.row||[];
-  }catch(e){return[];}
-}
-
-async function startSearch(){
-  const apiKey=getApiKey();
-  if(!apiKey){alert('API 키를 먼저 입력해주세요.');return;}
-  if(isSearching){showToast('검색 중...');return;}
-
-  const keywords=getActiveKeywords();
-  const activeBranches=getActiveBranches();
-  if(keywords.length===0){alert('키워드를 1개 이상 선택하세요.');return;}
-  if(activeBranches.length===0){alert('지사를 1개 이상 선택하세요.');return;}
-
-  const fromDate=document.getElementById('date-from').value;
-  const toDate=document.getElementById('date-to').value;
-  if(!fromDate||!toDate){alert('날짜를 입력하세요.');return;}
-
-  const dates=getDateRange(fromDate,toDate);
-  if(dates.length>365){alert('조회 기간은 최대 1년까지입니다.');return;}
-
-  isSearching=true;
-  allResults=[];
-  document.getElementById('stats-row').style.display='none';
-  document.getElementById('view-tabs').style.display='none';
-  document.getElementById('branch-view').innerHTML='';
-  document.getElementById('list-body').innerHTML='';
-  document.getElementById('progress-wrap').style.display='block';
-
-  const total=keywords.length*dates.length;
-  let done=0;
-  const seen=new Set();
-
-  // 활성 지사의 관할 지자체 목록 수집
-  const activeOrgs=new Set();
-  activeBranches.forEach(b=>{
-    (JURISDICTION_MAP[b]||[]).forEach(o=>activeOrgs.add(o));
-  });
-  // 시도명 목록
-  const activeSidos=new Set();
-  activeBranches.forEach(b=>{
-    const region=REGIONS.find(r=>r.branches.includes(b));
-    if(region){
-      if(region.name.includes('부산'))activeSidos.add('부산');
-      else if(region.name.includes('울산'))activeSidos.add('울산');
-      else activeSidos.add('경남');
-    }
-  });
-
-  for(const kw of keywords){
-    for(const date of dates){
-      const items=await fetchData(apiKey,kw,date);
-      for(const item of items){
-        const sido=item.wa_laf_hg_nm||'';
-        const orgName=item.laf_hg_nm||'';
-        // 시도 필터
-        const sidoMatch=[...activeSidos].some(s=>sido.includes(s));
-        if(!sidoMatch)continue;
-        // 중복 제거
-        const key=item.ctrt_ldgr_mng_no||JSON.stringify(item);
-        if(seen.has(key))continue;
-        seen.add(key);
-        // 지사 매핑
-        let branch=findBranchByOrg(orgName);
-        if(!branch){
-          // 시도로 1차 후보 추출 후 활성 지사 중 첫번째
-          const candidates=getBranchesBySido(sido).filter(b=>activeBranches.includes(b));
-          branch=candidates[0]||null;
-        }
-        item._keyword=kw;
-        item._branch=branch;
-        allResults.push(item);
-      }
-      done++;
-      const pct=Math.round(done/total*100);
-      document.getElementById('progress-fill').style.width=pct+'%';
-      document.getElementById('progress-text').textContent=`검색 중... [${kw}] ${date} (${pct}% — ${allResults.length}건 수집)`;
-      await new Promise(r=>setTimeout(r,50));
-    }
-  }
-
-  isSearching=false;
-  document.getElementById('progress-wrap').style.display='none';
-
-  if(allResults.length===0){showToast('검색 결과가 없습니다');return;}
-
-  renderAll(allResults, activeBranches);
-  showToast(`총 ${allResults.length}건 검색 완료!`);
-}
-
+function isCesco(name){return/세스코|cesco/i.test(name||'');}
 function classifyService(name){
   if(!name)return'기타';
   if(/방역|소독|해충|방제|살균|구서|구충|방충/.test(name))return'IPM';
@@ -460,57 +245,77 @@ function serviceBadge(svc){
   const map={IPM:'badge-ipm',IHM:'badge-ihm','렌탈':'badge-rental',FS:'badge-fs','기타':'badge-etc'};
   return`<span class="badge ${map[svc]||'badge-etc'}">${svc}</span>`;
 }
-function isCesco(name){return/세스코|cesco/i.test(name||'');}
-function formatAmt(v){
-  const n=parseInt(v||0);if(isNaN(n))return'—';
-  if(n>=100000000)return(n/100000000).toFixed(1)+'억';
-  if(n>=10000)return Math.round(n/10000)+'만원';
-  return n.toLocaleString()+'원';
-}
-function formatDate(d){
-  if(!d||d.length!==8)return d||'—';
-  return`${d.slice(0,4)}.${d.slice(4,6)}.${d.slice(6,8)}`;
-}
 
-function renderAll(data, activeBranches){
-  // 통계
-  const totalAmt=data.reduce((s,r)=>s+parseInt(r.ctrt_tot_tott_amt||0),0);
-  const cescoCount=data.filter(r=>isCesco(r.clt_nm)).length;
-  const competitorCount=data.filter(r=>!isCesco(r.clt_nm)).length;
-  document.getElementById('s-total').textContent=data.length.toLocaleString();
-  document.getElementById('s-amount').textContent=formatAmt(totalAmt);
-  document.getElementById('s-cesco').textContent=cescoCount;
-  document.getElementById('s-competitor').textContent=competitorCount;
-  document.getElementById('stats-row').style.display='grid';
-  document.getElementById('view-tabs').style.display='flex';
-
-  renderBranchView(data, activeBranches);
-  renderListView(data);
+// 데이터 로드
+async function loadData(){
+  try{
+    const resp=await fetch('contract-data/data.json?t='+Date.now());
+    if(!resp.ok)throw new Error('파일 없음');
+    const json=await resp.json();
+    rawData=json.data||[];
+    const updatedAt=json.updated_at||'';
+    document.getElementById('info-banner').innerHTML=
+      `✅ 데이터 로드 완료 — <b>${rawData.length}건</b> | 마지막 업데이트: <b>${updatedAt}</b><br>
+      <span style="font-size:11px;color:#3b82f6">매일 오전 10시 자동 업데이트 | 키워드/지사 필터로 원하는 데이터를 찾아보세요</span>`;
+    document.getElementById('stats-row').style.display='grid';
+    document.getElementById('view-tabs').style.display='flex';
+    applyFilter();
+  }catch(e){
+    document.getElementById('info-banner').innerHTML=
+      `⚠️ 데이터 파일이 아직 없습니다.<br>
+      <b>GitHub Actions를 수동으로 한 번 실행</b>하면 데이터가 생성돼요.<br>
+      <span style="font-size:11px">레포 → Actions → 계약현황 자동 수집 → Run workflow</span>`;
+  }
 }
 
-function renderBranchView(data, activeBranches){
-  // 지사별로 그룹핑
-  const grouped={};
-  activeBranches.forEach(b=>grouped[b]=[]);
-  data.forEach(r=>{
-    const b=r._branch;
-    if(b&&grouped[b])grouped[b].push(r);
-    else if(b&&!grouped[b])grouped[b]=[r];
+function applyFilter(){
+  const activeKws=getActiveKeywords();
+  const activeBranches=getActiveBranches();
+  const dateFrom=document.getElementById('date-from').value?.replace(/-/g,'')||'';
+  const dateTo=document.getElementById('date-to').value?.replace(/-/g,'')||'';
+  const ctrtKind=document.getElementById('ctrt-kind').value;
+  const company=document.getElementById('company-filter').value.toLowerCase();
+
+  currentFiltered=rawData.filter(r=>{
+    if(activeKws.length>0&&!activeKws.includes(r._keyword))return false;
+    if(activeBranches.length>0&&!activeBranches.includes(r._branch))return false;
+    const d=r.smz_ctrt_ymd||'';
+    if(dateFrom&&d<dateFrom)return false;
+    if(dateTo&&d>dateTo)return false;
+    if(ctrtKind&&!(r.ctrt_knd_nm||'').includes(ctrtKind))return false;
+    if(company&&!(r.clt_nm||'').toLowerCase().includes(company))return false;
+    return true;
   });
 
-  const branchView=document.getElementById('branch-view');
-  branchView.innerHTML=REGIONS.map(region=>{
-    const regionBranches=region.branches.filter(b=>activeBranches.includes(b));
-    if(regionBranches.length===0)return'';
-    return`<div style="margin-bottom:6px;font-size:11px;font-weight:700;color:#888;padding:4px 0">${region.name}</div>`+
-    regionBranches.map(branch=>{
+  // 통계
+  const totalAmt=currentFiltered.reduce((s,r)=>s+parseInt(r.ctrt_tot_tott_amt||0),0);
+  document.getElementById('s-total').textContent=currentFiltered.length.toLocaleString();
+  document.getElementById('s-amount').textContent=formatAmt(totalAmt);
+  document.getElementById('s-cesco').textContent=currentFiltered.filter(r=>isCesco(r.clt_nm)).length;
+  document.getElementById('s-competitor').textContent=currentFiltered.filter(r=>!isCesco(r.clt_nm)).length;
+
+  renderBranchView(currentFiltered);
+  renderListView(currentFiltered);
+}
+
+function renderBranchView(data){
+  const activeBranches=getActiveBranches();
+  const grouped={};
+  activeBranches.forEach(b=>grouped[b]=[]);
+  data.forEach(r=>{if(r._branch&&grouped[r._branch])grouped[r._branch].push(r);});
+
+  document.getElementById('branch-view').innerHTML=REGIONS.map(region=>{
+    const rBranches=region.branches.filter(b=>activeBranches.includes(b));
+    if(!rBranches.length)return'';
+    return`<div style="font-size:11px;font-weight:700;color:#888;padding:4px 0;margin-bottom:4px">${region.name}</div>`+
+    rBranches.map(branch=>{
       const items=(grouped[branch]||[]).sort((a,b)=>(b.smz_ctrt_ymd||'').localeCompare(a.smz_ctrt_ymd||''));
-      const branchAmt=items.reduce((s,r)=>s+parseInt(r.ctrt_tot_tott_amt||0),0);
+      const amt=items.reduce((s,r)=>s+parseInt(r.ctrt_tot_tott_amt||0),0);
       const cescoC=items.filter(r=>isCesco(r.clt_nm)).length;
       return`<div class="branch-group">
-        <div class="branch-group-header" onclick="toggleGroup(this)">
+        <div class="branch-group-header" onclick="this.nextElementSibling.classList.toggle('open')">
           <div class="branch-group-title">📍 ${branch} <span style="font-size:11px;color:#2563eb;font-weight:400">${items.length}건</span></div>
-          <div class="branch-group-meta">${formatAmt(branchAmt)} | 세스코 ${cescoC}건 | ▼</div>
+          <div style="font-size:11px;color:#999">${formatAmt(amt)} | 세스코 ${cescoC}건 ▼</div>
         </div>
         <div class="branch-group-body ${items.length>0?'open':''}">
           ${items.length===0
@@ -534,7 +339,14 @@ function renderBranchView(data, activeBranches){
 }
 
 function renderListView(data){
-  const sorted=[...data].sort((a,b)=>(b.smz_ctrt_ymd||'').localeCompare(a.smz_ctrt_ymd||''));
+  const q=document.getElementById('table-search')?.value?.toLowerCase()||'';
+  const filtered=q?data.filter(r=>
+    (r.ctrt_trgt_nm||'').toLowerCase().includes(q)||
+    (r.laf_hg_nm||'').toLowerCase().includes(q)||
+    (r.clt_nm||'').toLowerCase().includes(q)||
+    (r._branch||'').toLowerCase().includes(q)
+  ):data;
+  const sorted=[...filtered].sort((a,b)=>(b.smz_ctrt_ymd||'').localeCompare(a.smz_ctrt_ymd||''));
   document.getElementById('list-count').textContent=`${sorted.length}건`;
   document.getElementById('list-body').innerHTML=sorted.map(r=>`<tr class="${isCesco(r.clt_nm)?'cesco-row':''}">
     <td style="font-size:11px">${r._branch||'—'}</td>
@@ -549,34 +361,6 @@ function renderListView(data){
   </tr>`).join('');
 }
 
-function filterList(){
-  const q=document.getElementById('table-search').value.toLowerCase();
-  const filtered=allResults.filter(r=>
-    (r.ctrt_trgt_nm||'').toLowerCase().includes(q)||
-    (r.laf_hg_nm||'').toLowerCase().includes(q)||
-    (r.clt_nm||'').toLowerCase().includes(q)||
-    (r._branch||'').toLowerCase().includes(q)
-  );
-  document.getElementById('list-count').textContent=`${filtered.length}건`;
-  document.getElementById('list-body').innerHTML=filtered.map(r=>`<tr class="${isCesco(r.clt_nm)?'cesco-row':''}">
-    <td style="font-size:11px">${r._branch||'—'}</td>
-    <td>${r.wa_laf_hg_nm||'—'}</td>
-    <td style="font-size:11px">${r.laf_hg_nm||'—'}</td>
-    <td style="font-weight:500;max-width:240px">${r.ctrt_trgt_nm||'—'}</td>
-    <td>${r.ctrt_knd_nm||'—'}</td>
-    <td style="font-weight:600;color:#16a34a">${formatAmt(r.ctrt_tot_tott_amt)}</td>
-    <td style="font-weight:${isCesco(r.clt_nm)?'700':'400'};color:${isCesco(r.clt_nm)?'#2563eb':'#1a1a1a'}">${r.clt_nm||'—'}</td>
-    <td style="font-size:11px">${formatDate(r.smz_ctrt_ymd)}</td>
-    <td>${serviceBadge(classifyService(r.ctrt_trgt_nm))}</td>
-  </tr>`).join('');
-}
-
-function toggleGroup(el){
-  const body=el.nextElementSibling;
-  body.classList.toggle('open');
-}
-
-let currentView='branch';
 function switchView(v){
   currentView=v;
   document.getElementById('branch-view').style.display=v==='branch'?'block':'none';
@@ -586,9 +370,9 @@ function switchView(v){
 }
 
 function exportExcel(){
-  if(allResults.length===0){showToast('내보낼 데이터가 없습니다');return;}
+  if(!currentFiltered.length){showToast('데이터가 없습니다');return;}
   const rows=[['지사','시도','자치단체','계약명','계약종류','계약방법','계약금액(원)','업체명','계약일','서비스']];
-  [...allResults].sort((a,b)=>(a._branch||'').localeCompare(b._branch||'')).forEach(r=>{
+  [...currentFiltered].sort((a,b)=>(a._branch||'').localeCompare(b._branch||'')).forEach(r=>{
     rows.push([r._branch||'',r.wa_laf_hg_nm||'',r.laf_hg_nm||'',r.ctrt_trgt_nm||'',
       r.ctrt_knd_nm||'',r.ctrt_mth_nm||'',parseInt(r.ctrt_tot_tott_amt||0),
       r.clt_nm||'',formatDate(r.smz_ctrt_ymd),classifyService(r.ctrt_trgt_nm||'')]);
@@ -602,24 +386,22 @@ function exportExcel(){
   showToast('엑셀 다운로드 완료!');
 }
 
-function resetAll(){
-  document.querySelectorAll('.kw-chip').forEach(c=>c.classList.remove('active'));
-  document.querySelectorAll('.kw-chip[data-kw="방역"],[data-kw="소독"],[data-kw="해충"]').forEach(c=>c.classList.add('active'));
+function resetFilter(){
+  document.querySelectorAll('.kw-chip').forEach(c=>c.classList.add('active'));
   selectAllBranches();
   document.getElementById('ctrt-kind').value='';
   document.getElementById('company-filter').value='';
+  document.getElementById('date-from').value='';
+  document.getElementById('date-to').value='';
+  applyFilter();
 }
 
-// 키워드 칩 토글
 document.getElementById('kw-chips').addEventListener('click',e=>{
-  if(e.target.classList.contains('kw-chip'))e.target.classList.toggle('active');
+  if(e.target.classList.contains('kw-chip')){e.target.classList.toggle('active');applyFilter();}
 });
 
-// 초기화
 buildBranchSelector();
-updateApiBanner();
-const savedKey=getApiKey();
-if(savedKey)document.getElementById('api-key-input').value=savedKey;
+loadData();
 </script>
 </body>
 </html>
