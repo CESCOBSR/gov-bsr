@@ -1,7 +1,10 @@
 import requests
 import json
 import os
+import urllib3
 from datetime import datetime, timedelta
+
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 API_KEY = os.environ.get('LOFIN_API_KEY', '')
 BASE_URL = 'https://www.lofin365.go.kr/lf/hub/WCEGCF'
@@ -59,7 +62,7 @@ def fetch_by_date(keyword, date_str):
         'smz_ctrt_ymd': date_str,
     }
     try:
-        resp = requests.get(BASE_URL, params=params, timeout=15)
+        resp = requests.get(BASE_URL, params=params, timeout=15, verify=False)
         resp.raise_for_status()
         data = resp.json()
         rows = data.get('WCEGCF', [{}])[1].get('row', []) if len(data.get('WCEGCF', [])) > 1 else []
@@ -69,7 +72,6 @@ def fetch_by_date(keyword, date_str):
         return []
 
 def main():
-    # 최근 1년치 날짜 생성
     today = datetime.today()
     one_year_ago = today - timedelta(days=365)
     dates = []
@@ -87,20 +89,17 @@ def main():
             items = fetch_by_date(kw, date_str)
             for item in items:
                 sido = item.get('wa_laf_hg_nm', '')
-                # 부산/울산/경남 필터
                 if not any(s in sido for s in TARGET_SIDOS):
                     continue
                 key = item.get('ctrt_ldgr_mng_no') or json.dumps(item, ensure_ascii=False)
                 if key in seen:
                     continue
                 seen.add(key)
-                # 지사 매핑
                 org = item.get('laf_hg_nm', '')
                 item['_branch'] = find_branch(org)
                 item['_keyword'] = kw
                 all_results.append(item)
 
-    # 계약일 내림차순 정렬
     all_results.sort(key=lambda x: x.get('smz_ctrt_ymd', ''), reverse=True)
 
     output = {
