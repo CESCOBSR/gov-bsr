@@ -1,0 +1,34 @@
+name: 계약현황 자동 수집
+
+on:
+  schedule:
+    - cron: '0 1 * * *'  # 매일 오전 10시 (UTC+9 기준)
+  workflow_dispatch:      # 수동 실행 가능
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 코드 체크아웃
+        uses: actions/checkout@v3
+
+      - name: Python 설정
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: 패키지 설치
+        run: pip install requests
+
+      - name: 계약현황 수집
+        env:
+          LOFIN_API_KEY: ${{ secrets.LOFIN_API_KEY }}
+        run: python fetch_contracts.py
+
+      - name: 결과 커밋 & 푸시
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add contract-data/data.json
+          git diff --staged --quiet || git commit -m "계약현황 업데이트 $(date '+%Y-%m-%d')"
+          git push
