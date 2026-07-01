@@ -1,12 +1,15 @@
 import requests
 import json
 import os
+import ssl
 import urllib3
+import xml.etree.ElementTree as ET
+from requests.adapters import HTTPAdapter
+from urllib3.util.ssl_ import create_urllib3_context
 from datetime import datetime, timedelta
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
-API_KEY = os.environ.get('LOFIN_API_KEY', '')
 BASE_URL = 'https://www.lofin365.go.kr/lf/hub/WCEGCF'
 
 KEYWORDS = [
@@ -44,6 +47,21 @@ JURISDICTION_MAP = {
     '사천남해': ['사천시', '남해군'],
 }
 
+class LegacySSLAdapter(HTTPAdapter):
+    def init_poolmanager(self, *args, **kwargs):
+        ctx = create_urllib3_context()
+        ctx.check_hostname = False
+        ctx.verify_mode = ssl.CERT_NONE
+        ctx.set_ciphers('DEFAULT:@SECLEVEL=1')
+        ctx.options |= 0x4
+        kwargs['ssl_context'] = ctx
+        super(LegacySSLAdapter, self).init_poolmanager(*args, **kwargs)
+
+def create_session():
+    session = requests.Session()
+    session.mount('https://', LegacySSLAdapter())
+    return session
+
 def find_branch(org_name):
     if not org_name:
         return None
@@ -52,21 +70,30 @@ def find_branch(org_name):
             return branch
     return None
 
-def fetch_by_date(keyword, date_str):
+def parse_xml(xml_text):
+    try:
+        root = ET.fromstring(xml_text)
+        rows = []
+        for row in root.findall('row'):
+            item = {}
+            for child in row:
+                item[child.tag] = child.text or ''
+            rows.append(item)
+        return rows
+    except Exception as e:
+        return []
+
+def fetch_by_date(session, keyword, date_str):
     params = {
-        'Key': API_KEY,
-        'Type': 'json',
         'pIndex': 1,
         'pSize': 1000,
         'ctrt_trgt_nm': keyword,
         'smz_ctrt_ymd': date_str,
     }
     try:
-        resp = requests.get(BASE_URL, params=params, timeout=15, verify=False)
+        resp = session.get(BASE_URL, params=params, verify=False, timeout=15)
         resp.raise_for_status()
-        data = resp.json()
-        rows = data.get('WCEGCF', [{}])[1].get('row', []) if len(data.get('WCEGCF', [])) > 1 else []
-        return rows
+        return parse_xml(resp.text)
     except Exception as e:
         print(f"  오류: {keyword} / {date_str} — {e}")
         return []
@@ -80,13 +107,19 @@ def main():
         dates.append(cur.strftime('%Y%m%d'))
         cur += timedelta(days=1)
 
+    print(f"수집 기간: {dates[0]} ~ {dates[-1]} ({len(dates)}일)")
+    print(f"키워드: {len(KEYWORDS)}개")
+    print(f"총 API 호출 예정: {len(KEYWORDS) * len(dates)}회\n")
+
+    session = create_session()
     all_results = []
     seen = set()
 
     for kw in KEYWORDS:
-        print(f"키워드: {kw} ({len(dates)}일)")
+        print(f"키워드: [{kw}] 수집 중...")
+        kw_count = 0
         for date_str in dates:
-            items = fetch_by_date(kw, date_str)
+            items = fetch_by_date(session, kw, date_str)
             for item in items:
                 sido = item.get('wa_laf_hg_nm', '')
                 if not any(s in sido for s in TARGET_SIDOS):
@@ -99,6 +132,8 @@ def main():
                 item['_branch'] = find_branch(org)
                 item['_keyword'] = kw
                 all_results.append(item)
+                kw_count += 1
+        print(f"  → {kw_count}건 수집")
 
     all_results.sort(key=lambda x: x.get('smz_ctrt_ymd', ''), reverse=True)
 
