@@ -20,32 +20,8 @@ KEYWORDS = [
 
 TARGET_SIDOS = ['부산', '울산', '경남', '경상남']
 
-JURISDICTION_MAP = {
-    '부산동래': ['동래구', '연제구'],
-    '부산수영': ['수영구'],
-    '부산진구': ['부산진구'],
-    '부산기장': ['기장군'],
-    '해운대': ['해운대구', '금정구'],
-    '부산서부': ['서구', '중구', '동구', '영도구'],
-    '부산남부': ['남구'],
-    '부산북부': ['북구', '사상구'],
-    '부산사하': ['사하구', '강서구'],
-    '김해남부': ['김해시'],
-    '김해북부': ['김해시'],
-    '울산북부': ['북구', '울주군'],
-    '울산남부': ['남구'],
-    '울산서부': ['울주군'],
-    '울산중부': ['중구', '동구'],
-    '양산': ['양산시'],
-    '창원동부': ['창원시', '의창구', '성산구'],
-    '창원서부': ['창원시', '마산합포구', '마산회원구'],
-    '창원남부': ['창원시', '진해구'],
-    '창원북부': ['창원시'],
-    '진주동부': ['진주시'],
-    '진주서부': ['진주시', '사천시', '남해군', '하동군', '산청군', '함양군', '거창군', '합천군'],
-    '거제통영': ['거제시', '통영시', '고성군'],
-    '사천남해': ['사천시', '남해군'],
-}
+# 수집 시작일 고정 (2025-01-01) ~ 오늘까지
+START_DATE = datetime(2025, 1, 1)
 
 class LegacySSLAdapter(HTTPAdapter):
     def init_poolmanager(self, *args, **kwargs):
@@ -62,14 +38,6 @@ def create_session():
     session.mount('https://', LegacySSLAdapter())
     return session
 
-def find_branch(org_name):
-    if not org_name:
-        return None
-    for branch, orgs in JURISDICTION_MAP.items():
-        if any(o in org_name for o in orgs):
-            return branch
-    return None
-
 def parse_xml(xml_text):
     try:
         root = ET.fromstring(xml_text)
@@ -80,7 +48,7 @@ def parse_xml(xml_text):
                 item[child.tag] = child.text or ''
             rows.append(item)
         return rows
-    except Exception as e:
+    except Exception:
         return []
 
 def fetch_by_date(session, keyword, date_str):
@@ -100,16 +68,17 @@ def fetch_by_date(session, keyword, date_str):
 
 def main():
     today = datetime.today()
-    one_year_ago = today - timedelta(days=365)
     dates = []
-    cur = one_year_ago
+    cur = START_DATE
     while cur <= today:
         dates.append(cur.strftime('%Y%m%d'))
         cur += timedelta(days=1)
 
+    total_calls = len(KEYWORDS) * len(dates)
+    est_minutes = round(total_calls / 170)  # 과거 실측 기준 대략치
     print(f"수집 기간: {dates[0]} ~ {dates[-1]} ({len(dates)}일)")
     print(f"키워드: {len(KEYWORDS)}개")
-    print(f"총 API 호출 예정: {len(KEYWORDS) * len(dates)}회\n")
+    print(f"총 API 호출 예정: {total_calls}회 (예상 소요 약 {est_minutes}분)\n")
 
     session = create_session()
     all_results = []
@@ -128,8 +97,6 @@ def main():
                 if key in seen:
                     continue
                 seen.add(key)
-                org = item.get('laf_hg_nm', '')
-                item['_branch'] = find_branch(org)
                 item['_keyword'] = kw
                 all_results.append(item)
                 kw_count += 1
@@ -137,8 +104,19 @@ def main():
 
     all_results.sort(key=lambda x: x.get('smz_ctrt_ymd', ''), reverse=True)
 
+    # 시도/자치단체 요약 (참고용 로그)
+    jurisdictions = {}
+    for r in all_results:
+        sido = r.get('wa_laf_hg_nm', '기타')
+        gu = r.get('laf_hg_nm', '미상')
+        jurisdictions.setdefault(sido, set()).add(gu)
+    print("\n[수집된 자치단체 현황]")
+    for sido, gus in jurisdictions.items():
+        print(f"  {sido}: {len(gus)}개 자치단체 ({', '.join(sorted(gus))})")
+
     output = {
         'updated_at': today.strftime('%Y-%m-%d %H:%M'),
+        'collection_start': START_DATE.strftime('%Y-%m-%d'),
         'total': len(all_results),
         'data': all_results
     }

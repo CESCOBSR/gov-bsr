@@ -104,15 +104,15 @@ tr:hover td{background:#fafeff}
       <div class="kw-chip active" data-kw="착한가격">착한가격</div>
     </div>
 
-    <div class="section-label">지사 필터</div>
+    <div class="section-label">지자체 필터</div>
     <div class="select-btns">
-      <button class="btn btn-sm" onclick="selectAllBranches()">전체 선택</button>
-      <button class="btn btn-sm" onclick="deselectAllBranches()">전체 해제</button>
-      <button class="btn btn-sm" onclick="selectRegion('부산')">부산만</button>
-      <button class="btn btn-sm" onclick="selectRegion('울산')">울산만</button>
-      <button class="btn btn-sm" onclick="selectRegion('경남')">경남만</button>
+      <button class="btn btn-sm" onclick="selectAllJurisdictions()">전체 선택</button>
+      <button class="btn btn-sm" onclick="deselectAllJurisdictions()">전체 해제</button>
+      <button class="btn btn-sm" onclick="selectSido('부산')">부산만</button>
+      <button class="btn btn-sm" onclick="selectSido('울산')">울산만</button>
+      <button class="btn btn-sm" onclick="selectSido('경남')">경남만</button>
     </div>
-    <div id="branch-selector"></div>
+    <div id="jurisdiction-selector"><div style="font-size:11px;color:#bbb;padding:8px 0">데이터 로드 후 표시됩니다</div></div>
 
     <div class="filter-grid" style="margin-top:12px">
       <div class="filter-group">
@@ -153,11 +153,11 @@ tr:hover td{background:#fafeff}
   </div>
 
   <div class="view-tabs" id="view-tabs" style="display:none">
-    <div class="view-tab active" onclick="switchView('branch')" id="tab-branch">📍 지사별 보기</div>
+    <div class="view-tab active" onclick="switchView('juris')" id="tab-juris">📍 지자체별 보기</div>
     <div class="view-tab" onclick="switchView('list')" id="tab-list">📋 전체 목록</div>
   </div>
 
-  <div id="branch-view"></div>
+  <div id="juris-view"></div>
 
   <div id="list-view" style="display:none">
     <div class="table-wrap">
@@ -168,7 +168,7 @@ tr:hover td{background:#fafeff}
       <div style="overflow-x:auto">
         <table>
           <thead><tr>
-            <th>지사</th><th>시도</th><th>자치단체</th><th>계약명</th>
+            <th>시도</th><th>자치단체</th><th>계약명</th>
             <th>종류</th><th>금액</th><th>업체명</th><th>계약일</th><th>서비스</th>
           </tr></thead>
           <tbody id="list-body"></tbody>
@@ -182,39 +182,54 @@ tr:hover td{background:#fafeff}
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script>
-const REGIONS=[
-  {name:'부산동부권역',branches:['부산동래','부산수영','부산진구','부산기장','해운대']},
-  {name:'부산서부권역',branches:['부산서부','부산남부','부산북부','부산사하','김해남부','김해북부']},
-  {name:'울산양산권역',branches:['울산북부','울산남부','울산서부','울산중부','양산']},
-  {name:'경남동부권역',branches:['창원동부','창원서부','창원남부','창원북부']},
-  {name:'경남서부권역',branches:['진주동부','진주서부','거제통영','사천남해']}
-];
-
 let rawData=[];
 let currentFiltered=[];
-let currentView='branch';
+let currentView='juris';
+let jurisdictionMap={}; // { sido: Set(자치단체) } — 데이터 로드 후 채워짐
+let sidoOrder=[];
 
-// 지사 선택기
-function buildBranchSelector(){
-  const el=document.getElementById('branch-selector');
-  el.innerHTML=REGIONS.map(r=>`
-    <div class="region-block">
-      <div class="region-name">${r.name}</div>
-      <div class="branch-chips">${r.branches.map(b=>`<div class="br-chip active" data-branch="${b}" onclick="this.classList.toggle('active');applyFilter()">${b}</div>`).join('')}</div>
-    </div>`).join('');
+function sidoOf(waLafHgNm){
+  const s=waLafHgNm||'';
+  if(s.includes('부산'))return'부산';
+  if(s.includes('울산'))return'울산';
+  if(s.includes('경남')||s.includes('경상남'))return'경남';
+  return'기타';
 }
-function selectAllBranches(){document.querySelectorAll('.br-chip').forEach(c=>c.classList.add('active'));applyFilter();}
-function deselectAllBranches(){document.querySelectorAll('.br-chip').forEach(c=>c.classList.remove('active'));applyFilter();}
-function selectRegion(kw){
-  deselectAllBranches();
+
+// 지자체 선택기 — 실제 수집된 데이터 기준으로 동적 생성
+function buildJurisdictionSelector(){
+  jurisdictionMap={};
+  rawData.forEach(r=>{
+    const sido=sidoOf(r.wa_laf_hg_nm);
+    const gu=r.laf_hg_nm||'미상';
+    if(!jurisdictionMap[sido])jurisdictionMap[sido]=new Set();
+    jurisdictionMap[sido].add(gu);
+  });
+  sidoOrder=['부산','울산','경남'].filter(s=>jurisdictionMap[s]);
+  Object.keys(jurisdictionMap).forEach(s=>{if(!sidoOrder.includes(s))sidoOrder.push(s);});
+
+  const el=document.getElementById('jurisdiction-selector');
+  el.innerHTML=sidoOrder.map(sido=>{
+    const gus=[...jurisdictionMap[sido]].sort((a,b)=>a.localeCompare(b,'ko'));
+    return`<div class="region-block">
+      <div class="region-name">${sido}</div>
+      <div class="branch-chips">${gus.map(g=>`<div class="br-chip active" data-sido="${sido}" data-gu="${g}" onclick="this.classList.toggle('active');applyFilter()">${g}</div>`).join('')}</div>
+    </div>`;
+  }).join('');
+}
+function selectAllJurisdictions(){document.querySelectorAll('.br-chip').forEach(c=>c.classList.add('active'));applyFilter();}
+function deselectAllJurisdictions(){document.querySelectorAll('.br-chip').forEach(c=>c.classList.remove('active'));applyFilter();}
+function selectSido(sido){
+  deselectAllJurisdictions();
   document.querySelectorAll('.br-chip').forEach(c=>{
-    const b=c.dataset.branch;
-    const r=REGIONS.find(r=>r.branches.includes(b));
-    if(r&&r.name.includes(kw==='부산'?'부산':kw==='울산'?'울산':'경남'))c.classList.add('active');
+    if(c.dataset.sido===sido)c.classList.add('active');
   });
   applyFilter();
 }
-function getActiveBranches(){return[...document.querySelectorAll('.br-chip.active')].map(c=>c.dataset.branch);}
+function getActiveJurisdictions(){
+  return[...document.querySelectorAll('.br-chip.active')].map(c=>`${c.dataset.sido}||${c.dataset.gu}`);
+}
+function jurisKey(r){return`${sidoOf(r.wa_laf_hg_nm)}||${r.laf_hg_nm||'미상'}`;}
 function getActiveKeywords(){return[...document.querySelectorAll('.kw-chip.active')].map(c=>c.dataset.kw);}
 
 function showToast(msg){
@@ -254,11 +269,13 @@ async function loadData(){
     const json=await resp.json();
     rawData=json.data||[];
     const updatedAt=json.updated_at||'';
+    const collectionStart=json.collection_start||'';
     document.getElementById('info-banner').innerHTML=
-      `✅ 데이터 로드 완료 — <b>${rawData.length}건</b> | 마지막 업데이트: <b>${updatedAt}</b><br>
-      <span style="font-size:11px;color:#3b82f6">매일 오전 10시 자동 업데이트 | 키워드/지사 필터로 원하는 데이터를 찾아보세요</span>`;
+      `✅ 데이터 로드 완료 — <b>${rawData.length}건</b> | 수집기간: <b>${collectionStart||'—'} ~ 현재</b> | 마지막 업데이트: <b>${updatedAt}</b><br>
+      <span style="font-size:11px;color:#3b82f6">매일 오전 10시 자동 업데이트 | 키워드/지자체 필터로 원하는 데이터를 찾아보세요</span>`;
     document.getElementById('stats-row').style.display='grid';
     document.getElementById('view-tabs').style.display='flex';
+    buildJurisdictionSelector();
     applyFilter();
   }catch(e){
     document.getElementById('info-banner').innerHTML=
@@ -270,7 +287,7 @@ async function loadData(){
 
 function applyFilter(){
   const activeKws=getActiveKeywords();
-  const activeBranches=getActiveBranches();
+  const activeJuris=getActiveJurisdictions();
   const dateFrom=document.getElementById('date-from').value?.replace(/-/g,'')||'';
   const dateTo=document.getElementById('date-to').value?.replace(/-/g,'')||'';
   const ctrtKind=document.getElementById('ctrt-kind').value;
@@ -278,7 +295,7 @@ function applyFilter(){
 
   currentFiltered=rawData.filter(r=>{
     if(activeKws.length>0&&!activeKws.includes(r._keyword))return false;
-    if(activeBranches.length>0&&!activeBranches.includes(r._branch))return false;
+    if(activeJuris.length>0&&!activeJuris.includes(jurisKey(r)))return false;
     const d=r.smz_ctrt_ymd||'';
     if(dateFrom&&d<dateFrom)return false;
     if(dateTo&&d>dateTo)return false;
@@ -294,37 +311,38 @@ function applyFilter(){
   document.getElementById('s-cesco').textContent=currentFiltered.filter(r=>isCesco(r.clt_nm)).length;
   document.getElementById('s-competitor').textContent=currentFiltered.filter(r=>!isCesco(r.clt_nm)).length;
 
-  renderBranchView(currentFiltered);
+  renderJurisdictionView(currentFiltered);
   renderListView(currentFiltered);
 }
 
-function renderBranchView(data){
-  const activeBranches=getActiveBranches();
+function renderJurisdictionView(data){
+  const activeJuris=getActiveJurisdictions();
   const grouped={};
-  activeBranches.forEach(b=>grouped[b]=[]);
-  data.forEach(r=>{if(r._branch&&grouped[r._branch])grouped[r._branch].push(r);});
+  activeJuris.forEach(k=>grouped[k]=[]);
+  data.forEach(r=>{const k=jurisKey(r);if(grouped[k])grouped[k].push(r);});
 
-  document.getElementById('branch-view').innerHTML=REGIONS.map(region=>{
-    const rBranches=region.branches.filter(b=>activeBranches.includes(b));
-    if(!rBranches.length)return'';
-    return`<div style="font-size:11px;font-weight:700;color:#888;padding:4px 0;margin-bottom:4px">${region.name}</div>`+
-    rBranches.map(branch=>{
-      const items=(grouped[branch]||[]).sort((a,b)=>(b.smz_ctrt_ymd||'').localeCompare(a.smz_ctrt_ymd||''));
+  document.getElementById('juris-view').innerHTML=sidoOrder.map(sido=>{
+    const gus=[...(jurisdictionMap[sido]||[])].sort((a,b)=>a.localeCompare(b,'ko'));
+    const activeGus=gus.filter(g=>activeJuris.includes(`${sido}||${g}`));
+    if(!activeGus.length)return'';
+    return`<div style="font-size:11px;font-weight:700;color:#888;padding:4px 0;margin-bottom:4px">${sido}</div>`+
+    activeGus.map(gu=>{
+      const key=`${sido}||${gu}`;
+      const items=(grouped[key]||[]).sort((a,b)=>(b.smz_ctrt_ymd||'').localeCompare(a.smz_ctrt_ymd||''));
       const amt=items.reduce((s,r)=>s+parseInt(r.ctrt_tot_tott_amt||0),0);
       const cescoC=items.filter(r=>isCesco(r.clt_nm)).length;
       return`<div class="branch-group">
         <div class="branch-group-header" onclick="this.nextElementSibling.classList.toggle('open')">
-          <div class="branch-group-title">📍 ${branch} <span style="font-size:11px;color:#2563eb;font-weight:400">${items.length}건</span></div>
+          <div class="branch-group-title">📍 ${gu} <span style="font-size:11px;color:#2563eb;font-weight:400">${items.length}건</span></div>
           <div style="font-size:11px;color:#999">${formatAmt(amt)} | 세스코 ${cescoC}건 ▼</div>
         </div>
         <div class="branch-group-body ${items.length>0?'open':''}">
           ${items.length===0
-            ?'<div style="padding:20px;text-align:center;color:#bbb;font-size:12px">해당 지사 계약 없음</div>'
+            ?'<div style="padding:20px;text-align:center;color:#bbb;font-size:12px">해당 지자체 계약 없음</div>'
             :`<div style="overflow-x:auto"><table>
-              <thead><tr><th>자치단체</th><th>계약명</th><th>종류</th><th>금액</th><th>업체명</th><th>계약일</th><th>서비스</th></tr></thead>
+              <thead><tr><th>계약명</th><th>종류</th><th>금액</th><th>업체명</th><th>계약일</th><th>서비스</th></tr></thead>
               <tbody>${items.map(r=>`<tr class="${isCesco(r.clt_nm)?'cesco-row':''}">
-                <td style="font-size:11px">${r.laf_hg_nm||'—'}</td>
-                <td style="font-weight:500;max-width:260px">${r.ctrt_trgt_nm||'—'}</td>
+                <td style="font-weight:500;max-width:280px">${r.ctrt_trgt_nm||'—'}</td>
                 <td>${r.ctrt_knd_nm||'—'}</td>
                 <td style="font-weight:600;color:#16a34a">${formatAmt(r.ctrt_tot_tott_amt)}</td>
                 <td style="font-weight:${isCesco(r.clt_nm)?'700':'400'};color:${isCesco(r.clt_nm)?'#2563eb':'#1a1a1a'}">${r.clt_nm||'—'}</td>
@@ -343,13 +361,11 @@ function renderListView(data){
   const filtered=q?data.filter(r=>
     (r.ctrt_trgt_nm||'').toLowerCase().includes(q)||
     (r.laf_hg_nm||'').toLowerCase().includes(q)||
-    (r.clt_nm||'').toLowerCase().includes(q)||
-    (r._branch||'').toLowerCase().includes(q)
+    (r.clt_nm||'').toLowerCase().includes(q)
   ):data;
   const sorted=[...filtered].sort((a,b)=>(b.smz_ctrt_ymd||'').localeCompare(a.smz_ctrt_ymd||''));
   document.getElementById('list-count').textContent=`${sorted.length}건`;
   document.getElementById('list-body').innerHTML=sorted.map(r=>`<tr class="${isCesco(r.clt_nm)?'cesco-row':''}">
-    <td style="font-size:11px">${r._branch||'—'}</td>
     <td>${r.wa_laf_hg_nm||'—'}</td>
     <td style="font-size:11px">${r.laf_hg_nm||'—'}</td>
     <td style="font-weight:500;max-width:240px">${r.ctrt_trgt_nm||'—'}</td>
@@ -363,22 +379,22 @@ function renderListView(data){
 
 function switchView(v){
   currentView=v;
-  document.getElementById('branch-view').style.display=v==='branch'?'block':'none';
+  document.getElementById('juris-view').style.display=v==='juris'?'block':'none';
   document.getElementById('list-view').style.display=v==='list'?'block':'none';
-  document.getElementById('tab-branch').className='view-tab'+(v==='branch'?' active':'');
+  document.getElementById('tab-juris').className='view-tab'+(v==='juris'?' active':'');
   document.getElementById('tab-list').className='view-tab'+(v==='list'?' active':'');
 }
 
 function exportExcel(){
   if(!currentFiltered.length){showToast('데이터가 없습니다');return;}
-  const rows=[['지사','시도','자치단체','계약명','계약종류','계약방법','계약금액(원)','업체명','계약일','서비스']];
-  [...currentFiltered].sort((a,b)=>(a._branch||'').localeCompare(b._branch||'')).forEach(r=>{
-    rows.push([r._branch||'',r.wa_laf_hg_nm||'',r.laf_hg_nm||'',r.ctrt_trgt_nm||'',
+  const rows=[['시도','자치단체','계약명','계약종류','계약방법','계약금액(원)','업체명','계약일','서비스']];
+  [...currentFiltered].sort((a,b)=>jurisKey(a).localeCompare(jurisKey(b),'ko')).forEach(r=>{
+    rows.push([r.wa_laf_hg_nm||'',r.laf_hg_nm||'',r.ctrt_trgt_nm||'',
       r.ctrt_knd_nm||'',r.ctrt_mth_nm||'',parseInt(r.ctrt_tot_tott_amt||0),
       r.clt_nm||'',formatDate(r.smz_ctrt_ymd),classifyService(r.ctrt_trgt_nm||'')]);
   });
   const ws=XLSX.utils.aoa_to_sheet(rows);
-  ws['!cols']=[{wch:10},{wch:8},{wch:14},{wch:30},{wch:8},{wch:12},{wch:14},{wch:16},{wch:12},{wch:8}];
+  ws['!cols']=[{wch:10},{wch:14},{wch:30},{wch:8},{wch:12},{wch:14},{wch:16},{wch:12},{wch:8}];
   const wb=XLSX.utils.book_new();
   XLSX.utils.book_append_sheet(wb,ws,'계약현황');
   const d=new Date().toISOString().split('T')[0].replace(/-/g,'');
@@ -388,7 +404,7 @@ function exportExcel(){
 
 function resetFilter(){
   document.querySelectorAll('.kw-chip').forEach(c=>c.classList.add('active'));
-  selectAllBranches();
+  selectAllJurisdictions();
   document.getElementById('ctrt-kind').value='';
   document.getElementById('company-filter').value='';
   document.getElementById('date-from').value='';
@@ -400,7 +416,6 @@ document.getElementById('kw-chips').addEventListener('click',e=>{
   if(e.target.classList.contains('kw-chip')){e.target.classList.toggle('active');applyFilter();}
 });
 
-buildBranchSelector();
 loadData();
 </script>
 </body>
