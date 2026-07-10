@@ -40,6 +40,10 @@ body{font-family:'Apple SD Gothic Neo','Malgun Gothic',sans-serif;background:#f4
 .branch-group{background:#fff;border:1px solid #e8e8e8;border-radius:10px;margin-bottom:10px;overflow:hidden}
 .branch-group-header{padding:11px 16px;background:#fafafa;border-bottom:1px solid #e8e8e8;display:flex;align-items:center;justify-content:space-between;cursor:pointer}
 .branch-group-title{font-size:13px;font-weight:700}
+.src-badge{display:inline-block;padding:2px 7px;border-radius:5px;font-size:10px;font-weight:600;vertical-align:middle;margin-left:4px}
+.src-own{background:#f0fdf4;color:#16a34a}
+.src-lofin{background:#eff6ff;color:#2563eb}
+.src-mixed{background:#fef3c7;color:#b45309}
 .branch-group-body{display:none}
 .branch-group-body.open{display:block}
 .table-wrap{background:#fff;border:1px solid #e8e8e8;border-radius:10px;overflow:hidden;margin-bottom:14px}
@@ -272,7 +276,8 @@ async function loadData(){
     const collectionStart=json.collection_start||'';
     document.getElementById('info-banner').innerHTML=
       `✅ 데이터 로드 완료 — <b>${rawData.length}건</b> | 수집기간: <b>${collectionStart||'—'} ~ 현재</b> | 마지막 업데이트: <b>${updatedAt}</b><br>
-      <span style="font-size:11px;color:#3b82f6">매일 오전 10시 자동 업데이트 | 키워드/지자체 필터로 원하는 데이터를 찾아보세요</span>`;
+      <span style="font-size:11px;color:#3b82f6">매일 오전 10시 자동 업데이트 | 키워드/지자체 필터로 원하는 데이터를 찾아보세요</span><br>
+      <span style="font-size:11px;color:#888">데이터 소스: <span class="src-badge src-lofin">lofin365</span> 행안부 통합시스템 | <span class="src-badge src-own">지자체 자체</span> 개별 사이트 직접 수집(더 정확)</span>`;
     document.getElementById('stats-row').style.display='grid';
     document.getElementById('view-tabs').style.display='flex';
     buildJurisdictionSelector();
@@ -331,9 +336,17 @@ function renderJurisdictionView(data){
       const items=(grouped[key]||[]).sort((a,b)=>(b.smz_ctrt_ymd||'').localeCompare(a.smz_ctrt_ymd||''));
       const amt=items.reduce((s,r)=>s+parseInt(r.ctrt_tot_tott_amt||0),0);
       const cescoC=items.filter(r=>isCesco(r.clt_nm)).length;
+      const sources=new Set(items.map(r=>r._source||'lofin365'));
+      let srcBadge='';
+      if(sources.size===1){
+        const s=[...sources][0];
+        srcBadge=s==='지자체자체'?'<span class="src-badge src-own">지자체 자체</span>':'<span class="src-badge src-lofin">lofin365</span>';
+      }else if(sources.size>1){
+        srcBadge='<span class="src-badge src-mixed">지자체자체+lofin365</span>';
+      }
       return`<div class="branch-group">
         <div class="branch-group-header" onclick="this.nextElementSibling.classList.toggle('open')">
-          <div class="branch-group-title">📍 ${gu} <span style="font-size:11px;color:#2563eb;font-weight:400">${items.length}건</span></div>
+          <div class="branch-group-title">📍 ${gu} <span style="font-size:11px;color:#2563eb;font-weight:400">${items.length}건</span> ${srcBadge}</div>
           <div style="font-size:11px;color:#999">${formatAmt(amt)} | 세스코 ${cescoC}건 ▼</div>
         </div>
         <div class="branch-group-body ${items.length>0?'open':''}">
