@@ -64,6 +64,33 @@ tr:hover td{background:#fafeff}
 .loading{text-align:center;padding:40px;color:#999;font-size:13px}
 .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#1a1a1a;color:#fff;padding:10px 20px;border-radius:20px;font-size:13px;z-index:300;opacity:0;transition:opacity 0.3s;pointer-events:none;white-space:nowrap}
 .toast.show{opacity:1}
+.search-wrap{position:relative;margin-bottom:14px}
+.search-wrap .icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);font-size:14px;color:#999;pointer-events:none}
+.search-wrap input{width:100%;padding:10px 12px 10px 34px;font-size:13px;border:1px solid #e0e0e0;border-radius:10px;font-family:inherit;outline:none;background:#fff}
+.search-wrap input:focus{border-color:#2563eb}
+.stat-card.clickable{cursor:pointer;transition:all 0.15s}
+.stat-card.clickable:hover{border-color:#2563eb;background:#f8fafd}
+.stat-card.mode-active{border-color:#2563eb;background:#eff6ff}
+.mode-banner{display:none;align-items:center;justify-content:space-between;background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:8px 14px;margin-bottom:12px;font-size:12px;color:#1e40af}
+.mode-banner.show{display:flex}
+.mode-banner button{background:none;border:none;color:#2563eb;font-size:12px;font-weight:700;cursor:pointer}
+tr.clickable-row{cursor:pointer}
+.sheet-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:400;opacity:0;pointer-events:none;transition:opacity 0.2s}
+.sheet-overlay.open{opacity:1;pointer-events:auto}
+.sheet{position:fixed;left:0;right:0;bottom:0;background:#fff;border-radius:16px 16px 0 0;z-index:401;padding:20px;max-width:520px;margin:0 auto;transform:translateY(100%);transition:transform 0.25s ease;max-height:85vh;overflow-y:auto;box-shadow:0 -4px 24px rgba(0,0,0,0.15)}
+.sheet.open{transform:translateY(0)}
+.sheet-handle{width:36px;height:4px;background:#e0e0e0;border-radius:2px;margin:0 auto 16px}
+.sheet-title{font-size:15px;font-weight:700;margin-bottom:14px}
+.sheet-row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #f4f4f4;font-size:12px}
+.sheet-row .k{color:#999}
+.sheet-row .v{font-weight:600;text-align:right;max-width:65%}
+.sheet-field{margin-top:14px}
+.sheet-field label{font-size:11px;color:#666;font-weight:600;display:block;margin-bottom:5px}
+.sheet-field select{width:100%;padding:9px 10px;font-size:13px;border:1px solid #e0e0e0;border-radius:8px;font-family:inherit;outline:none;background:#fff}
+.sheet-actions{display:flex;gap:8px;margin-top:18px}
+.sheet-actions .btn{flex:1;padding:11px;font-size:13px}
+.btn-danger{background:#fef2f2;color:#dc2626;border-color:#fecaca}
+.edited-badge{display:inline-block;padding:1px 6px;border-radius:5px;font-size:9px;font-weight:600;background:#fef3c7;color:#b45309;margin-left:4px;vertical-align:middle}
 @media(max-width:768px){
   .stats-row{grid-template-columns:repeat(2,1fr)}
   .main{padding:12px}
@@ -90,6 +117,11 @@ tr:hover td{background:#fafeff}
   <div class="card">
     <div class="card-title">🔍 필터</div>
 
+    <div class="search-wrap">
+      <span class="icon">🔍</span>
+      <input type="text" id="global-search" placeholder="계약명, 지자체, 동/읍/면, 업체명으로 검색..." oninput="onSearchInput()">
+    </div>
+
     <div class="section-label">키워드 필터</div>
     <div class="chip-wrap" id="kw-chips">
       <div class="kw-chip active" data-kw="방역">🦟 방역</div>
@@ -106,6 +138,13 @@ tr:hover td{background:#fafeff}
       <div class="kw-chip active" data-kw="위생">위생</div>
       <div class="kw-chip active" data-kw="식품위생">식품위생</div>
       <div class="kw-chip active" data-kw="착한가격">착한가격</div>
+      <div class="kw-chip active" data-kw="전통시장">전통시장</div>
+      <div class="kw-chip active" data-kw="냉난방기">냉난방기</div>
+      <div class="kw-chip active" data-kw="자가품질">자가품질</div>
+      <div class="kw-chip active" data-kw="HACCP">HACCP</div>
+      <div class="kw-chip active" data-kw="영양성분">영양성분</div>
+      <div class="kw-chip active" data-kw="유효성평가">유효성평가</div>
+      <div class="kw-chip active" data-kw="CCP">CCP</div>
     </div>
 
     <div class="section-label">지자체 필터</div>
@@ -150,10 +189,15 @@ tr:hover td{background:#fafeff}
   </div>
 
   <div class="stats-row" id="stats-row" style="display:none">
-    <div class="stat-card"><div class="stat-label">전체 계약건수</div><div class="stat-val" id="s-total">0</div></div>
-    <div class="stat-card"><div class="stat-label">총 계약금액</div><div class="stat-val" style="font-size:14px;color:#16a34a" id="s-amount">0</div></div>
-    <div class="stat-card"><div class="stat-label">경쟁사 계약</div><div class="stat-val" style="color:#dc2626" id="s-competitor">0</div></div>
-    <div class="stat-card"><div class="stat-label">세스코 계약</div><div class="stat-val" style="color:#2563eb" id="s-cesco">0</div></div>
+    <div class="stat-card clickable" id="card-total" onclick="setCescoMode('all')"><div class="stat-label">전체 계약건수</div><div class="stat-val" id="s-total">0</div></div>
+    <div class="stat-card clickable" id="card-amount" onclick="setCescoMode('all')"><div class="stat-label">총 계약금액</div><div class="stat-val" style="font-size:14px;color:#16a34a" id="s-amount">0</div></div>
+    <div class="stat-card clickable" id="card-competitor" onclick="setCescoMode('competitor')"><div class="stat-label">경쟁사 계약</div><div class="stat-val" style="color:#dc2626" id="s-competitor">0</div></div>
+    <div class="stat-card clickable" id="card-cesco" onclick="setCescoMode('cesco')"><div class="stat-label">세스코 계약</div><div class="stat-val" style="color:#2563eb" id="s-cesco">0</div></div>
+  </div>
+
+  <div class="mode-banner" id="mode-banner">
+    <span id="mode-banner-text"></span>
+    <button onclick="setCescoMode('all')">✕ 필터 해제</button>
   </div>
 
   <div class="view-tabs" id="view-tabs" style="display:none">
@@ -167,7 +211,7 @@ tr:hover td{background:#fafeff}
     <div class="table-wrap">
       <div class="table-header">
         <div style="font-size:13px;font-weight:700">전체 목록 <span id="list-count" style="color:#2563eb"></span></div>
-        <input type="text" id="table-search" placeholder="검색..." style="padding:6px 10px;font-size:12px;border:1px solid #e0e0e0;border-radius:8px;outline:none;width:160px" oninput="renderListView(currentFiltered)">
+        <span style="font-size:11px;color:#bbb">행을 클릭하면 수정/삭제할 수 있어요</span>
       </div>
       <div style="overflow-x:auto">
         <table>
@@ -184,6 +228,30 @@ tr:hover td{background:#fafeff}
 </div>
 <div class="toast" id="toast"></div>
 
+<div class="sheet-overlay" id="sheet-overlay" onclick="closeEditModal()"></div>
+<div class="sheet" id="edit-sheet">
+  <div class="sheet-handle"></div>
+  <div class="sheet-title">계약 정보 수정</div>
+  <div id="sheet-body"></div>
+  <div class="sheet-field">
+    <label>서비스 분류</label>
+    <select id="sheet-service-select">
+      <option value="IPM">IPM (방역/소독/해충)</option>
+      <option value="IHM">IHM (청소용역)</option>
+      <option value="렌탈">렌탈 (정수기/공기청정기 등)</option>
+      <option value="FS">FS (위생/식품)</option>
+      <option value="기타">기타</option>
+    </select>
+  </div>
+  <div class="sheet-actions">
+    <button class="btn btn-danger" onclick="deleteRecordFromSheet()">🗑 목록에서 삭제</button>
+    <button class="btn btn-primary" onclick="saveEditFromSheet()">저장</button>
+  </div>
+  <div style="margin-top:8px">
+    <button class="btn" style="width:100%" onclick="closeEditModal()">닫기</button>
+  </div>
+</div>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script>
 let rawData=[];
@@ -191,6 +259,30 @@ let currentFiltered=[];
 let currentView='juris';
 let jurisdictionMap={}; // { sido: Set(자치단체) } — 데이터 로드 후 채워짐
 let sidoOrder=[];
+let cescoMode='all'; // 'all' | 'cesco' | 'competitor'
+let searchDebounceTimer=null;
+let currentEditId=null;
+
+// ── 로컬 수정/삭제 오버레이 (이 브라우저에만 저장됨. 원본 data.json은 바뀌지 않음) ──
+let overrides={};
+let deletedIds=new Set();
+try{overrides=JSON.parse(localStorage.getItem('govbsr_overrides')||'{}');}catch(e){overrides={};}
+try{deletedIds=new Set(JSON.parse(localStorage.getItem('govbsr_deleted')||'[]'));}catch(e){deletedIds=new Set();}
+function saveOverrides(){localStorage.setItem('govbsr_overrides',JSON.stringify(overrides));}
+function saveDeleted(){localStorage.setItem('govbsr_deleted',JSON.stringify([...deletedIds]));}
+
+// 레코드 고유 id 생성 (원본 데이터에 고유키가 없어서 주요 필드 조합으로 생성)
+function recordId(r){
+  const raw=`${r.laf_hg_nm||''}|${r.ctrt_trgt_nm||''}|${r.clt_nm||''}|${r.smz_ctrt_ymd||''}|${r.ctrt_tot_tott_amt||''}`;
+  let h=0;
+  for(let i=0;i<raw.length;i++){h=(h*31+raw.charCodeAt(i))|0;}
+  return'r'+(h>>>0).toString(36);
+}
+function getService(r){
+  const ov=overrides[r._id];
+  return ov&&ov.service?ov.service:classifyService(r.ctrt_trgt_nm);
+}
+function isOverridden(r){return!!(overrides[r._id]&&overrides[r._id].service);}
 
 function sidoOf(waLafHgNm){
   const s=waLafHgNm||'';
@@ -272,6 +364,7 @@ async function loadData(){
     if(!resp.ok)throw new Error('파일 없음');
     const json=await resp.json();
     rawData=json.data||[];
+    rawData.forEach(r=>{r._id=recordId(r);});
     const updatedAt=json.updated_at||'';
     const collectionStart=json.collection_start||'';
     document.getElementById('info-banner').innerHTML=
@@ -290,6 +383,11 @@ async function loadData(){
   }
 }
 
+function onSearchInput(){
+  clearTimeout(searchDebounceTimer);
+  searchDebounceTimer=setTimeout(applyFilter,150);
+}
+
 function applyFilter(){
   const activeKws=getActiveKeywords();
   const activeJuris=getActiveJurisdictions();
@@ -297,8 +395,11 @@ function applyFilter(){
   const dateTo=document.getElementById('date-to').value?.replace(/-/g,'')||'';
   const ctrtKind=document.getElementById('ctrt-kind').value;
   const company=document.getElementById('company-filter').value.toLowerCase();
+  const searchQ=(document.getElementById('global-search')?.value||'').trim().toLowerCase();
 
-  currentFiltered=rawData.filter(r=>{
+  // 삭제된 항목 제외 + 기본 필터 (검색 포함) → 통계는 항상 이 기준
+  const baseFiltered=rawData.filter(r=>{
+    if(deletedIds.has(r._id))return false;
     if(activeKws.length>0&&!activeKws.includes(r._keyword))return false;
     if(activeJuris.length>0&&!activeJuris.includes(jurisKey(r)))return false;
     const d=r.smz_ctrt_ymd||'';
@@ -306,18 +407,46 @@ function applyFilter(){
     if(dateTo&&d>dateTo)return false;
     if(ctrtKind&&!(r.ctrt_knd_nm||'').includes(ctrtKind))return false;
     if(company&&!(r.clt_nm||'').toLowerCase().includes(company))return false;
+    if(searchQ){
+      const hay=`${r.ctrt_trgt_nm||''} ${r.laf_hg_nm||''} ${r.wa_laf_hg_nm||''} ${r.clt_nm||''}`.toLowerCase();
+      if(!hay.includes(searchQ))return false;
+    }
     return true;
   });
 
-  // 통계
-  const totalAmt=currentFiltered.reduce((s,r)=>s+parseInt(r.ctrt_tot_tott_amt||0),0);
-  document.getElementById('s-total').textContent=currentFiltered.length.toLocaleString();
+  // 통계 (전체계약건수/총계약금액/경쟁사/세스코 — 세스코 모드와 무관하게 항상 baseFiltered 기준)
+  const totalAmt=baseFiltered.reduce((s,r)=>s+parseInt(r.ctrt_tot_tott_amt||0),0);
+  document.getElementById('s-total').textContent=baseFiltered.length.toLocaleString();
   document.getElementById('s-amount').textContent=formatAmt(totalAmt);
-  document.getElementById('s-cesco').textContent=currentFiltered.filter(r=>isCesco(r.clt_nm)).length;
-  document.getElementById('s-competitor').textContent=currentFiltered.filter(r=>!isCesco(r.clt_nm)).length;
+  document.getElementById('s-cesco').textContent=baseFiltered.filter(r=>isCesco(r.clt_nm)).length;
+  document.getElementById('s-competitor').textContent=baseFiltered.filter(r=>!isCesco(r.clt_nm)).length;
 
+  // 세스코 모드에 따라 실제 표시되는 목록만 좁힘
+  currentFiltered=cescoMode==='cesco'?baseFiltered.filter(r=>isCesco(r.clt_nm))
+    :cescoMode==='competitor'?baseFiltered.filter(r=>!isCesco(r.clt_nm))
+    :baseFiltered;
+
+  updateModeBanner();
+  updateStatCardHighlight();
   renderJurisdictionView(currentFiltered);
   renderListView(currentFiltered);
+}
+
+function setCescoMode(mode){
+  cescoMode=mode;
+  applyFilter();
+  if(mode!=='all'){switchView('list');}
+}
+function updateModeBanner(){
+  const banner=document.getElementById('mode-banner');
+  const text=document.getElementById('mode-banner-text');
+  if(cescoMode==='cesco'){text.textContent=`🔵 세스코 계약 ${currentFiltered.length}건만 보는 중`;banner.classList.add('show');}
+  else if(cescoMode==='competitor'){text.textContent=`🔴 경쟁사 계약 ${currentFiltered.length}건만 보는 중`;banner.classList.add('show');}
+  else{banner.classList.remove('show');}
+}
+function updateStatCardHighlight(){
+  document.getElementById('card-cesco').classList.toggle('mode-active',cescoMode==='cesco');
+  document.getElementById('card-competitor').classList.toggle('mode-active',cescoMode==='competitor');
 }
 
 function renderJurisdictionView(data){
@@ -354,13 +483,13 @@ function renderJurisdictionView(data){
             ?'<div style="padding:20px;text-align:center;color:#bbb;font-size:12px">해당 지자체 계약 없음</div>'
             :`<div style="overflow-x:auto"><table>
               <thead><tr><th>계약명</th><th>종류</th><th>금액</th><th>업체명</th><th>계약일</th><th>서비스</th></tr></thead>
-              <tbody>${items.map(r=>`<tr class="${isCesco(r.clt_nm)?'cesco-row':''}">
+              <tbody>${items.map(r=>`<tr class="clickable-row ${isCesco(r.clt_nm)?'cesco-row':''}" onclick="openEditModal('${r._id}')">
                 <td style="font-weight:500;max-width:280px">${r.ctrt_trgt_nm||'—'}</td>
                 <td>${r.ctrt_knd_nm||'—'}</td>
                 <td style="font-weight:600;color:#16a34a">${formatAmt(r.ctrt_tot_tott_amt)}</td>
                 <td style="font-weight:${isCesco(r.clt_nm)?'700':'400'};color:${isCesco(r.clt_nm)?'#2563eb':'#1a1a1a'}">${r.clt_nm||'—'}</td>
                 <td style="font-size:11px">${formatDate(r.smz_ctrt_ymd)}</td>
-                <td>${serviceBadge(classifyService(r.ctrt_trgt_nm))}</td>
+                <td>${serviceBadge(getService(r))}${isOverridden(r)?'<span class="edited-badge">수정됨</span>':''}</td>
               </tr>`).join('')}</tbody>
             </table></div>`}
         </div>
@@ -370,15 +499,9 @@ function renderJurisdictionView(data){
 }
 
 function renderListView(data){
-  const q=document.getElementById('table-search')?.value?.toLowerCase()||'';
-  const filtered=q?data.filter(r=>
-    (r.ctrt_trgt_nm||'').toLowerCase().includes(q)||
-    (r.laf_hg_nm||'').toLowerCase().includes(q)||
-    (r.clt_nm||'').toLowerCase().includes(q)
-  ):data;
-  const sorted=[...filtered].sort((a,b)=>(b.smz_ctrt_ymd||'').localeCompare(a.smz_ctrt_ymd||''));
+  const sorted=[...data].sort((a,b)=>(b.smz_ctrt_ymd||'').localeCompare(a.smz_ctrt_ymd||''));
   document.getElementById('list-count').textContent=`${sorted.length}건`;
-  document.getElementById('list-body').innerHTML=sorted.map(r=>`<tr class="${isCesco(r.clt_nm)?'cesco-row':''}">
+  document.getElementById('list-body').innerHTML=sorted.map(r=>`<tr class="clickable-row ${isCesco(r.clt_nm)?'cesco-row':''}" onclick="openEditModal('${r._id}')">
     <td>${r.wa_laf_hg_nm||'—'}</td>
     <td style="font-size:11px">${r.laf_hg_nm||'—'}</td>
     <td style="font-weight:500;max-width:240px">${r.ctrt_trgt_nm||'—'}</td>
@@ -386,7 +509,7 @@ function renderListView(data){
     <td style="font-weight:600;color:#16a34a">${formatAmt(r.ctrt_tot_tott_amt)}</td>
     <td style="font-weight:${isCesco(r.clt_nm)?'700':'400'};color:${isCesco(r.clt_nm)?'#2563eb':'#1a1a1a'}">${r.clt_nm||'—'}</td>
     <td style="font-size:11px">${formatDate(r.smz_ctrt_ymd)}</td>
-    <td>${serviceBadge(classifyService(r.ctrt_trgt_nm))}</td>
+    <td>${serviceBadge(getService(r))}${isOverridden(r)?'<span class="edited-badge">수정됨</span>':''}</td>
   </tr>`).join('');
 }
 
@@ -398,13 +521,60 @@ function switchView(v){
   document.getElementById('tab-list').className='view-tab'+(v==='list'?' active':'');
 }
 
+function findRecordById(id){return rawData.find(r=>r._id===id);}
+
+function openEditModal(id){
+  const r=findRecordById(id);
+  if(!r)return;
+  currentEditId=id;
+  document.getElementById('sheet-body').innerHTML=`
+    <div class="sheet-row"><span class="k">계약명</span><span class="v">${r.ctrt_trgt_nm||'—'}</span></div>
+    <div class="sheet-row"><span class="k">자치단체</span><span class="v">${r.wa_laf_hg_nm||''} ${r.laf_hg_nm||''}</span></div>
+    <div class="sheet-row"><span class="k">업체명</span><span class="v">${r.clt_nm||'—'}</span></div>
+    <div class="sheet-row"><span class="k">계약금액</span><span class="v">${formatAmt(r.ctrt_tot_tott_amt)}</span></div>
+    <div class="sheet-row"><span class="k">계약일</span><span class="v">${formatDate(r.smz_ctrt_ymd)}</span></div>
+  `;
+  document.getElementById('sheet-service-select').value=getService(r);
+  document.getElementById('sheet-overlay').classList.add('open');
+  document.getElementById('edit-sheet').classList.add('open');
+}
+function closeEditModal(){
+  document.getElementById('sheet-overlay').classList.remove('open');
+  document.getElementById('edit-sheet').classList.remove('open');
+  currentEditId=null;
+}
+function saveEditFromSheet(){
+  if(!currentEditId)return;
+  const service=document.getElementById('sheet-service-select').value;
+  const r=findRecordById(currentEditId);
+  const defaultService=classifyService(r.ctrt_trgt_nm);
+  if(service===defaultService){
+    delete overrides[currentEditId]; // 자동분류와 같으면 오버라이드 저장 불필요
+  }else{
+    overrides[currentEditId]={service};
+  }
+  saveOverrides();
+  closeEditModal();
+  applyFilter();
+  showToast('수정 완료 (이 브라우저에만 저장됨)');
+}
+function deleteRecordFromSheet(){
+  if(!currentEditId)return;
+  if(!confirm('이 계약을 목록에서 삭제할까요? (이 브라우저에서만 숨겨지며, 원본 데이터는 지워지지 않습니다)'))return;
+  deletedIds.add(currentEditId);
+  saveDeleted();
+  closeEditModal();
+  applyFilter();
+  showToast('삭제 완료 (이 브라우저에만 반영됨)');
+}
+
 function exportExcel(){
   if(!currentFiltered.length){showToast('데이터가 없습니다');return;}
   const rows=[['시도','자치단체','계약명','계약종류','계약방법','계약금액(원)','업체명','계약일','서비스']];
   [...currentFiltered].sort((a,b)=>jurisKey(a).localeCompare(jurisKey(b),'ko')).forEach(r=>{
     rows.push([r.wa_laf_hg_nm||'',r.laf_hg_nm||'',r.ctrt_trgt_nm||'',
       r.ctrt_knd_nm||'',r.ctrt_mth_nm||'',parseInt(r.ctrt_tot_tott_amt||0),
-      r.clt_nm||'',formatDate(r.smz_ctrt_ymd),classifyService(r.ctrt_trgt_nm||'')]);
+      r.clt_nm||'',formatDate(r.smz_ctrt_ymd),getService(r)]);
   });
   const ws=XLSX.utils.aoa_to_sheet(rows);
   ws['!cols']=[{wch:10},{wch:14},{wch:30},{wch:8},{wch:12},{wch:14},{wch:16},{wch:12},{wch:8}];
@@ -422,6 +592,8 @@ function resetFilter(){
   document.getElementById('company-filter').value='';
   document.getElementById('date-from').value='';
   document.getElementById('date-to').value='';
+  document.getElementById('global-search').value='';
+  cescoMode='all';
   applyFilter();
 }
 
